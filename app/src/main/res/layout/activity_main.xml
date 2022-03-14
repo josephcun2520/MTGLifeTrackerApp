@@ -155,4 +155,16 @@
         app:layout_constraintStart_toEndOf="@+id/divider3"
         app:layout_constraintTop_toBottomOf="@+id/p1LifeCount" />
 
+    <Button
+        android:layout_width="50dp"
+        android:text="D"
+        android:id="@+id/diceButton"
+        android:layout_height="50dp"
+        tools:layout_editor_absoluteX="180dp"
+        tools:layout_editor_absoluteY="262dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
