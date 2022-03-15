@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MTG Life Tracker App</string>
+
+    <string-array name="dice_array">
+        <item>Coinflip</item>
+        <item>D6</item>
+        <item>D20</item>
+    </string-array>
+
 </resources>
