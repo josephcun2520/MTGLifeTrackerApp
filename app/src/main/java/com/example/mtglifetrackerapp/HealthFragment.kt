@@ -40,11 +40,11 @@ class HealthFragment : Fragment() {
     fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.setText(health.toString())
-        if (health > 39)
+        if (health > 29)
             view?.setBackgroundColor(Color.GREEN)
         if (health in 16..29)
             view?.setBackgroundColor(Color.YELLOW)
-        else if (health in 1..15)
+        else if (health < 15)
             view?.setBackgroundColor(Color.RED)
         return null
     }
