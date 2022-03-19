@@ -8,4 +8,7 @@
         <item>D20</item>
     </string-array>
 
+    <string name="dice_button">Dice</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">40</string>
 </resources>
