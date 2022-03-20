@@ -45,7 +45,7 @@ class DiceActivity : AppCompatActivity() {
                 v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
             } else {
                 //deprecated in API 26
-                v.vibrate(500)
+                v.vibrate(500)                  //TODO: Test
             }
         }
         //roll different types of dice + quantity
