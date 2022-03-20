@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,8 +26,8 @@ class HealthFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var healthCount : TextView? = null
-    var upButton : Button? = null
-    var downButton : Button? = null
+    var upButton : ImageButton? = null
+    var downButton : ImageButton? = null
     var health : Int = 40
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +41,7 @@ class HealthFragment : Fragment() {
     fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.setText(health.toString())
-        if (health > 29)
-            view?.setBackgroundColor(Color.GREEN)
-        if (health in 16..29)
-            view?.setBackgroundColor(Color.YELLOW)
-        else if (health < 15)
-            view?.setBackgroundColor(Color.RED)
+
         return null
     }
 
@@ -60,7 +56,6 @@ class HealthFragment : Fragment() {
         healthCount = view.findViewById(R.id.healthTextView)
         upButton?.setOnClickListener{changeHealth(1)}
         downButton?.setOnClickListener{changeHealth(-1)}
-        view.setBackgroundColor(Color.GREEN)
         return view
     }
 
