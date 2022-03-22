@@ -1,16 +1,19 @@
 package com.example.mtglifetrackerapp
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
+import android.os.Vibrator
 import android.widget.Button
-import com.example.mtglifetrackerapp.DiceActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mtglifetrackerapp.databinding.ActivityMainBinding
 import java.util.*
 
 private lateinit var binding : ActivityMainBinding
 
 private var players = Vector<PlayerData>()
+var pattern = longArrayOf(0, 250, 500, 250, 500)
+var winPattern = longArrayOf(0, 500, 250, 500, 250)
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +21,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        players.addAll(listOf(PlayerData(1, 20, false), PlayerData(2, 20, false), PlayerData(3,20, false), PlayerData(4,20, false)))
-        //TODO: make id unique
+        val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
+
+        players.addAll(listOf(PlayerData(1, 20, false, 0, 0, 0, 0),
+            PlayerData(2, 20, false, 0, 0, 0, 0),
+            PlayerData(3,20, false, 0, 0, 0, 0),
+            PlayerData(4,20, false, 0, 0, 0, 0)))
+        //TODO: make id unique / String or use database?
+
+        //TODO: connect the buttons up to the data class
 
         val but : Button = binding.diceButton
         but.setOnClickListener {
@@ -35,6 +45,33 @@ class MainActivity : AppCompatActivity() {
                 }
                 else {
                     players[i].isMonarch = false
+                }
+            }
+        }
+
+        fun onLoseHealth(playerIdx : Int, vib : Vibrator) {
+
+            var gameOver : Boolean = false
+            var aliveCount : Int = 0
+            for (i in players.indices) {
+                if (players[i].health > 0) {
+                    aliveCount++
+                }
+            }
+            if (aliveCount > 1)
+                gameOver = true
+
+            if (gameOver) {
+                vib.vibrate(winPattern, -1) //Win pattern
+                //TODO: disable all buttons & display win notification
+            } else {
+                if (players[playerIdx].health - 1 == 0) {    //Dead
+                    //TODO: disable the button here
+                    --players[playerIdx].health
+                    vib.vibrate(pattern, -1)       //Player dead
+                } else {
+                    --players[playerIdx].health //Decrement health
+                    vib.vibrate(500)
                 }
             }
         }
