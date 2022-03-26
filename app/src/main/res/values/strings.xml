@@ -4,4 +4,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="default_health_value">40</string>
     <string name="default_commander_dmg">0</string>
+
+    <string-array name="dice_array">
+        <item>Select Dice</item>
+        <item>Coinflip</item>
+        <item>D6</item>
+        <item>D20</item>
+    </string-array>
 </resources>

@@ -18,4 +18,8 @@
         <item name="android:padding">18dp</item>
     </style>
 
+    <style name="HealthTextView" parent="Base.CardView">
+        <item name="android:padding">18dp</item>
+    </style>
+
 </resources>
