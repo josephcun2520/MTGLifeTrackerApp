@@ -2,6 +2,7 @@ package com.example.mtglifetrackerapp
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.style.UpdateLayout
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +28,10 @@ class HealthFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var healthCount : TextView? = null
+
+    var cDmgCol1 = ""
+    var cDmgCol2 = ""
+    var cDmgCol3 = ""
 
     var commanderDmg1 : TextView? = null
     var commanderDmg2 : TextView? = null
@@ -62,6 +68,20 @@ class HealthFragment : Fragment() {
     fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.setText(health.toString())
+        val playerNo = 1
+        var text = ""
+        if (amount < 0) {
+            val posAmount = amount * -1
+            text = "Player $playerNo lost $posAmount health!"
+        }
+        else
+        {
+            text = "Player $playerNo gained $amount health!"
+        }
+        val duration = Toast.LENGTH_SHORT
+
+        val toast = Toast.makeText(context, text, duration)
+        toast.show()
 
         return null
     }
@@ -83,7 +103,7 @@ class HealthFragment : Fragment() {
         return null
     }
 
-    fun changePage(amount:Int): View.OnClickListener? {
+    private fun changePage(amount:Int): View.OnClickListener? {
         page += amount
 
         if (page > 2)
@@ -91,53 +111,52 @@ class HealthFragment : Fragment() {
         else if (page < 0)
             page = 2
 
-        if (page == 0)
-        {
-            healthCount?.visibility=View.INVISIBLE
-            upButton?.visibility=View.INVISIBLE
-            downButton?.visibility=View.INVISIBLE
+        when (page) {
+            0 -> {
+                healthCount?.visibility=View.INVISIBLE
+                upButton?.visibility=View.INVISIBLE
+                downButton?.visibility=View.INVISIBLE
 
-            commanderDmg1?.visibility=View.VISIBLE
-            commanderDmg2?.visibility=View.VISIBLE
-            commanderDmg3?.visibility=View.VISIBLE
-            cDmgUp1Btn?.visibility=View.VISIBLE
-            cDmgUp2Btn?.visibility=View.VISIBLE
-            cDmgUp3Btn?.visibility=View.VISIBLE
-            cDmgDown1Btn?.visibility=View.VISIBLE
-            cDmgDown2Btn?.visibility=View.VISIBLE
-            cDmgDown3Btn?.visibility=View.VISIBLE
-        }
-        else if (page == 1)
-        {
-            healthCount?.visibility=View.VISIBLE
-            upButton?.visibility=View.VISIBLE
-            downButton?.visibility=View.VISIBLE
+                commanderDmg1?.visibility=View.VISIBLE
+                commanderDmg2?.visibility=View.VISIBLE
+                commanderDmg3?.visibility=View.VISIBLE
+                cDmgUp1Btn?.visibility=View.VISIBLE
+                cDmgUp2Btn?.visibility=View.VISIBLE
+                cDmgUp3Btn?.visibility=View.VISIBLE
+                cDmgDown1Btn?.visibility=View.VISIBLE
+                cDmgDown2Btn?.visibility=View.VISIBLE
+                cDmgDown3Btn?.visibility=View.VISIBLE
+            }
+            1 -> {
+                healthCount?.visibility=View.VISIBLE
+                upButton?.visibility=View.VISIBLE
+                downButton?.visibility=View.VISIBLE
 
-            commanderDmg1?.visibility=View.INVISIBLE
-            commanderDmg2?.visibility=View.INVISIBLE
-            commanderDmg3?.visibility=View.INVISIBLE
-            cDmgUp1Btn?.visibility=View.INVISIBLE
-            cDmgUp2Btn?.visibility=View.INVISIBLE
-            cDmgUp3Btn?.visibility=View.INVISIBLE
-            cDmgDown1Btn?.visibility=View.INVISIBLE
-            cDmgDown2Btn?.visibility=View.INVISIBLE
-            cDmgDown3Btn?.visibility=View.INVISIBLE
-        }
-        else if (page == 2)
-        {
-            healthCount?.visibility=View.INVISIBLE
-            upButton?.visibility=View.INVISIBLE
-            downButton?.visibility=View.INVISIBLE
+                commanderDmg1?.visibility=View.INVISIBLE
+                commanderDmg2?.visibility=View.INVISIBLE
+                commanderDmg3?.visibility=View.INVISIBLE
+                cDmgUp1Btn?.visibility=View.INVISIBLE
+                cDmgUp2Btn?.visibility=View.INVISIBLE
+                cDmgUp3Btn?.visibility=View.INVISIBLE
+                cDmgDown1Btn?.visibility=View.INVISIBLE
+                cDmgDown2Btn?.visibility=View.INVISIBLE
+                cDmgDown3Btn?.visibility=View.INVISIBLE
+            }
+            2 -> {
+                healthCount?.visibility=View.INVISIBLE
+                upButton?.visibility=View.INVISIBLE
+                downButton?.visibility=View.INVISIBLE
 
-            commanderDmg1?.visibility=View.INVISIBLE
-            commanderDmg2?.visibility=View.INVISIBLE
-            commanderDmg3?.visibility=View.INVISIBLE
-            cDmgUp1Btn?.visibility=View.INVISIBLE
-            cDmgUp2Btn?.visibility=View.INVISIBLE
-            cDmgUp3Btn?.visibility=View.INVISIBLE
-            cDmgDown1Btn?.visibility=View.INVISIBLE
-            cDmgDown2Btn?.visibility=View.INVISIBLE
-            cDmgDown3Btn?.visibility=View.INVISIBLE
+                commanderDmg1?.visibility=View.INVISIBLE
+                commanderDmg2?.visibility=View.INVISIBLE
+                commanderDmg3?.visibility=View.INVISIBLE
+                cDmgUp1Btn?.visibility=View.INVISIBLE
+                cDmgUp2Btn?.visibility=View.INVISIBLE
+                cDmgUp3Btn?.visibility=View.INVISIBLE
+                cDmgDown1Btn?.visibility=View.INVISIBLE
+                cDmgDown2Btn?.visibility=View.INVISIBLE
+                cDmgDown3Btn?.visibility=View.INVISIBLE
+            }
         }
 
         return null
@@ -148,8 +167,11 @@ class HealthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view:View = inflater.inflate(R.layout.fragment_health, container, false)
+        return inflater.inflate(R.layout.fragment_health, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         upButton = view.findViewById(R.id.upButton)
         downButton = view.findViewById(R.id.downButton)
         leftButton = view.findViewById(R.id.leftButton)
@@ -176,7 +198,7 @@ class HealthFragment : Fragment() {
         cDmgDown2Btn?.setOnClickListener{changeCommanderDamage(-1,2)}
         cDmgDown3Btn?.setOnClickListener{changeCommanderDamage(-1,3)}
 
-        return view
+
     }
 
     companion object {
