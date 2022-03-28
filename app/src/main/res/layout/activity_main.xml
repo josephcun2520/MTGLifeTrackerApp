@@ -6,63 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.mtglifetrackerapp.HealthFragment"
+        android:name="com.example.mtglifetrackerapp.TestFragment"
         android:layout_width="197dp"
         android:layout_height="320dp"
         android:layout_margin="5dp"
         android:background="@color/player1"
         android:rotation="0"
+        android:tag="player1Fragment"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragmentContainerView2"
-        android:name="com.example.mtglifetrackerapp.HealthFragment"
+        android:name="com.example.mtglifetrackerapp.TestFragment"
         android:layout_width="197dp"
         android:layout_height="320dp"
         android:layout_margin="5dp"
         android:background="@color/player2"
         android:rotation="180"
+        android:tag="player2Fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragmentContainerView3"
-        android:name="com.example.mtglifetrackerapp.HealthFragment"
+        android:name="com.example.mtglifetrackerapp.TestFragment"
         android:layout_width="197dp"
         android:layout_height="320dp"
         android:layout_margin="5dp"
         android:background="@color/player3"
         android:rotation="0"
+        android:tag="player3Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragmentContainerView4"
-        android:name="com.example.mtglifetrackerapp.HealthFragment"
+        android:name="com.example.mtglifetrackerapp.TestFragment"
         android:layout_width="197dp"
         android:layout_height="320dp"
         android:layout_margin="5dp"
         android:background="@color/player4"
         android:rotation="180"
+        android:tag="player4Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/diceButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="5dp"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false"
-        android:scaleType="centerInside"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dice_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/d6"
-        tools:srcCompat="@drawable/d6" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,13 @@
 package com.example.mtglifetrackerapp
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,67 +21,56 @@ private const val ARG_PARAM2 = "param2"
  */
 class HealthFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    var healthCount : TextView? = null
+    private var healthCount : TextView? = null
 
-    var commanderDmg1 : TextView? = null
-    var commanderDmg2 : TextView? = null
-    var commanderDmg3: TextView? = null
-    var cDmgUp1Btn : ImageButton? = null
-    var cDmgUp2Btn : ImageButton? = null
-    var cDmgUp3Btn : ImageButton? = null
-    var cDmgDown1Btn : ImageButton? = null
-    var cDmgDown2Btn : ImageButton? = null
-    var cDmgDown3Btn : ImageButton? = null
+    private var commanderDmg1 : TextView? = null
+    private var commanderDmg2 : TextView? = null
+    private var commanderDmg3: TextView? = null
+    private var cDmgUp1Btn : ImageButton? = null
+    private var cDmgUp2Btn : ImageButton? = null
+    private var cDmgUp3Btn : ImageButton? = null
+    private var cDmgDown1Btn : ImageButton? = null
+    private var cDmgDown2Btn : ImageButton? = null
+    private var cDmgDown3Btn : ImageButton? = null
 
-    var upButton : ImageButton? = null
-    var downButton : ImageButton? = null
+    private var upButton : ImageButton? = null
+    private var downButton : ImageButton? = null
 
-    var leftButton : ImageButton? = null
-    var rightButton : ImageButton? = null
-    var health : Int = 40
-    var cDmg1 : Int = 0
-    var cDmg2 : Int = 0
-    var cDmg3 : Int = 0
-    var page : Int = 1
+    private var leftButton : ImageButton? = null
+    private var rightButton : ImageButton? = null
+    private var health : Int = 40
+    private var cDmg1 : Int = 0
+    private var cDmg2 : Int = 0
+    private var cDmg3 : Int = 0
+    private var page : Int = 1
 
-    val pg1Views = arrayOfNulls<View>(3)
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    fun changeHealth(amount:Int): View.OnClickListener? {
+    private fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
-        healthCount?.setText(health.toString())
+        healthCount?.text = health.toString()
 
         return null
     }
 
-    fun changeCommanderDamage(amount:Int,player:Int):View.OnClickListener? {
-        if (player == 1){
-            cDmg1 += amount
-            commanderDmg1?.setText(cDmg1.toString())
-        }
-        else if (player == 2) {
-            cDmg2 += amount
-            commanderDmg2?.setText(cDmg2.toString())
-        }
-        else if (player == 3) {
-            cDmg3 += amount
-            commanderDmg3?.setText(cDmg3.toString())
+    private fun changeCommanderDamage(amount:Int,player:Int):View.OnClickListener? {
+        when (player) {
+            1 -> {
+                cDmg1 += amount
+                commanderDmg1?.text = cDmg1.toString()
+            }
+            2 -> {
+                cDmg2 += amount
+                commanderDmg2?.text = cDmg2.toString()
+            }
+            3 -> {
+                cDmg3 += amount
+                commanderDmg3?.text = cDmg3.toString()
+            }
         }
 
         return null
     }
 
-    fun changePage(amount:Int): View.OnClickListener? {
+    private fun changePage(amount:Int): View.OnClickListener? {
         page += amount
 
         if (page > 2)
@@ -91,53 +78,52 @@ class HealthFragment : Fragment() {
         else if (page < 0)
             page = 2
 
-        if (page == 0)
-        {
-            healthCount?.visibility=View.INVISIBLE
-            upButton?.visibility=View.INVISIBLE
-            downButton?.visibility=View.INVISIBLE
+        when (page) {
+            0 -> {
+                healthCount?.visibility=View.INVISIBLE
+                upButton?.visibility=View.INVISIBLE
+                downButton?.visibility=View.INVISIBLE
 
-            commanderDmg1?.visibility=View.VISIBLE
-            commanderDmg2?.visibility=View.VISIBLE
-            commanderDmg3?.visibility=View.VISIBLE
-            cDmgUp1Btn?.visibility=View.VISIBLE
-            cDmgUp2Btn?.visibility=View.VISIBLE
-            cDmgUp3Btn?.visibility=View.VISIBLE
-            cDmgDown1Btn?.visibility=View.VISIBLE
-            cDmgDown2Btn?.visibility=View.VISIBLE
-            cDmgDown3Btn?.visibility=View.VISIBLE
-        }
-        else if (page == 1)
-        {
-            healthCount?.visibility=View.VISIBLE
-            upButton?.visibility=View.VISIBLE
-            downButton?.visibility=View.VISIBLE
+                commanderDmg1?.visibility=View.VISIBLE
+                commanderDmg2?.visibility=View.VISIBLE
+                commanderDmg3?.visibility=View.VISIBLE
+                cDmgUp1Btn?.visibility=View.VISIBLE
+                cDmgUp2Btn?.visibility=View.VISIBLE
+                cDmgUp3Btn?.visibility=View.VISIBLE
+                cDmgDown1Btn?.visibility=View.VISIBLE
+                cDmgDown2Btn?.visibility=View.VISIBLE
+                cDmgDown3Btn?.visibility=View.VISIBLE
+            }
+            1 -> {
+                healthCount?.visibility=View.VISIBLE
+                upButton?.visibility=View.VISIBLE
+                downButton?.visibility=View.VISIBLE
 
-            commanderDmg1?.visibility=View.INVISIBLE
-            commanderDmg2?.visibility=View.INVISIBLE
-            commanderDmg3?.visibility=View.INVISIBLE
-            cDmgUp1Btn?.visibility=View.INVISIBLE
-            cDmgUp2Btn?.visibility=View.INVISIBLE
-            cDmgUp3Btn?.visibility=View.INVISIBLE
-            cDmgDown1Btn?.visibility=View.INVISIBLE
-            cDmgDown2Btn?.visibility=View.INVISIBLE
-            cDmgDown3Btn?.visibility=View.INVISIBLE
-        }
-        else if (page == 2)
-        {
-            healthCount?.visibility=View.INVISIBLE
-            upButton?.visibility=View.INVISIBLE
-            downButton?.visibility=View.INVISIBLE
+                commanderDmg1?.visibility=View.INVISIBLE
+                commanderDmg2?.visibility=View.INVISIBLE
+                commanderDmg3?.visibility=View.INVISIBLE
+                cDmgUp1Btn?.visibility=View.INVISIBLE
+                cDmgUp2Btn?.visibility=View.INVISIBLE
+                cDmgUp3Btn?.visibility=View.INVISIBLE
+                cDmgDown1Btn?.visibility=View.INVISIBLE
+                cDmgDown2Btn?.visibility=View.INVISIBLE
+                cDmgDown3Btn?.visibility=View.INVISIBLE
+            }
+            2 -> {
+                healthCount?.visibility=View.INVISIBLE
+                upButton?.visibility=View.INVISIBLE
+                downButton?.visibility=View.INVISIBLE
 
-            commanderDmg1?.visibility=View.INVISIBLE
-            commanderDmg2?.visibility=View.INVISIBLE
-            commanderDmg3?.visibility=View.INVISIBLE
-            cDmgUp1Btn?.visibility=View.INVISIBLE
-            cDmgUp2Btn?.visibility=View.INVISIBLE
-            cDmgUp3Btn?.visibility=View.INVISIBLE
-            cDmgDown1Btn?.visibility=View.INVISIBLE
-            cDmgDown2Btn?.visibility=View.INVISIBLE
-            cDmgDown3Btn?.visibility=View.INVISIBLE
+                commanderDmg1?.visibility=View.INVISIBLE
+                commanderDmg2?.visibility=View.INVISIBLE
+                commanderDmg3?.visibility=View.INVISIBLE
+                cDmgUp1Btn?.visibility=View.INVISIBLE
+                cDmgUp2Btn?.visibility=View.INVISIBLE
+                cDmgUp3Btn?.visibility=View.INVISIBLE
+                cDmgDown1Btn?.visibility=View.INVISIBLE
+                cDmgDown2Btn?.visibility=View.INVISIBLE
+                cDmgDown3Btn?.visibility=View.INVISIBLE
+            }
         }
 
         return null
@@ -146,9 +132,13 @@ class HealthFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view:View = inflater.inflate(R.layout.fragment_health, container, false)
+        return inflater.inflate(R.layout.fragment_health, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         upButton = view.findViewById(R.id.upButton)
         downButton = view.findViewById(R.id.downButton)
@@ -176,7 +166,6 @@ class HealthFragment : Fragment() {
         cDmgDown2Btn?.setOnClickListener{changeCommanderDamage(-1,2)}
         cDmgDown3Btn?.setOnClickListener{changeCommanderDamage(-1,3)}
 
-        return view
     }
 
     companion object {
