@@ -1,6 +1,5 @@
 package com.example.mtglifetrackerapp
 
-import android.R.attr.button
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -34,12 +34,12 @@ class HealthFragment : Fragment() {
     var cDmgCol2 = ""
     var cDmgCol3 = ""
 
-    var x1 = 0
-    var x2 = 0
-    var y1 = 0
-    var y2 = 0
-    var dx = 0
-    var dy = 0
+    public var x1 = 0
+    public var x2 = 0
+    public var y1 = 0
+    public var y2 = 0
+    public var dx = 0
+    public var dy = 0
 
     var commanderDmg1 : TextView? = null
     var commanderDmg2 : TextView? = null
@@ -53,6 +53,17 @@ class HealthFragment : Fragment() {
 
     var upButton : ImageButton? = null
     var downButton : ImageButton? = null
+
+    var bloodImg : ImageView? = null
+    var token1 : TextView? = null
+    var token2 : TextView? = null
+    var token3 : TextView? = null
+    var token1UpBtn : ImageButton? = null
+    var token2UpBtn : ImageButton? = null
+    var token3UpBtn : ImageButton? = null
+    var token1DownBtn : ImageButton? = null
+    var token2DownBtn : ImageButton? = null
+    var token3DownBtn : ImageButton? = null
 
     var leftButton : ImageButton? = null
     var rightButton : ImageButton? = null
@@ -134,6 +145,16 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.VISIBLE
                 cDmgDown2Btn?.visibility=View.VISIBLE
                 cDmgDown3Btn?.visibility=View.VISIBLE
+
+                token1?.visibility=View.INVISIBLE
+                token2?.visibility=View.INVISIBLE
+                token3?.visibility=View.INVISIBLE
+                token1UpBtn?.visibility=View.INVISIBLE
+                token2UpBtn?.visibility=View.INVISIBLE
+                token3UpBtn?.visibility=View.INVISIBLE
+                token1DownBtn?.visibility=View.INVISIBLE
+                token2DownBtn?.visibility=View.INVISIBLE
+                token3DownBtn?.visibility=View.INVISIBLE
             }
             1 -> {
                 healthCount?.visibility=View.VISIBLE
@@ -149,6 +170,16 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+
+                token1?.visibility=View.INVISIBLE
+                token2?.visibility=View.INVISIBLE
+                token3?.visibility=View.INVISIBLE
+                token1UpBtn?.visibility=View.INVISIBLE
+                token2UpBtn?.visibility=View.INVISIBLE
+                token3UpBtn?.visibility=View.INVISIBLE
+                token1DownBtn?.visibility=View.INVISIBLE
+                token2DownBtn?.visibility=View.INVISIBLE
+                token3DownBtn?.visibility=View.INVISIBLE
             }
             2 -> {
                 healthCount?.visibility=View.INVISIBLE
@@ -164,6 +195,16 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+
+                token1?.visibility=View.VISIBLE
+                token2?.visibility=View.VISIBLE
+                token3?.visibility=View.VISIBLE
+                token1UpBtn?.visibility=View.VISIBLE
+                token2UpBtn?.visibility=View.VISIBLE
+                token3UpBtn?.visibility=View.VISIBLE
+                token1DownBtn?.visibility=View.VISIBLE
+                token2DownBtn?.visibility=View.VISIBLE
+                token3DownBtn?.visibility=View.VISIBLE
             }
         }
 
@@ -194,9 +235,20 @@ class HealthFragment : Fragment() {
         cDmgDown1Btn = view.findViewById(R.id.cDmgDown1)
         cDmgDown2Btn = view.findViewById(R.id.cDmgDown2)
         cDmgDown3Btn = view.findViewById(R.id.cDmgDown3)
+        token1 = view.findViewById(R.id.token1)
+        token2 = view.findViewById(R.id.token2)
+        token3 = view.findViewById(R.id.token3)
+        token1UpBtn = view.findViewById(R.id.token1Up)
+        token2UpBtn = view.findViewById(R.id.token2Up)
+        token3UpBtn = view.findViewById(R.id.token3Up)
+        token1DownBtn = view.findViewById(R.id.token1Down)
+        token2DownBtn = view.findViewById(R.id.token2Down)
+        token3DownBtn = view.findViewById(R.id.token3Down)
+        bloodImg = view.findViewById(R.id.bloodImage)
 
         upButton?.setOnClickListener{changeHealth(1)}
 
+        //TODO: Move on touch listener to separate function so that it can be used for many elements without needing 30 lines for each
         healthCount?.setOnTouchListener(OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 x1 = event.getX().toInt()
@@ -207,14 +259,16 @@ class HealthFragment : Fragment() {
                 dx = x2-x1
                 dy = y2-y1
 
+                //TODO: Make this function take distance/angle into account
+
                 if(Math.abs(dx) > Math.abs(dy))
                 {
                     if (dx>0){
-                        //right
+                        changePage(-1)
                     }
                     else if (dx<0)
                     {
-                        //left
+                        changePage(1)
                     }
                 }
                 else
@@ -223,6 +277,105 @@ class HealthFragment : Fragment() {
                         changeHealth(-1)
                     else if (dy<0)  //down
                         changeHealth(1)
+                }
+            }
+            true
+        })
+
+        commanderDmg1?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeCommanderDamage(-1,1)
+                    else if (dy<0)  //down
+                        changeCommanderDamage(1,1)
+                }
+            }
+            true
+        })
+
+        commanderDmg2?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeCommanderDamage(-1,2)
+                    else if (dy<0)  //down
+                        changeCommanderDamage(1,2)
+                }
+            }
+            true
+        })
+
+        commanderDmg3?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeCommanderDamage(-1,3)
+                    else if (dy<0)  //down
+                        changeCommanderDamage(1,3)
                 }
             }
             true
