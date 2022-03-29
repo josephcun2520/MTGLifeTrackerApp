@@ -102,6 +102,51 @@
         app:layout_constraintTop_toBottomOf="@+id/cDmgUp2"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/bloodImage"
+        android:layout_width="52dp"
+        android:layout_height="62dp"
+        android:alpha="0.6"
+        android:rotation="90"
+        android:src="@drawable/blood"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/token1"
+        app:layout_constraintEnd_toStartOf="@+id/token1Up"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toEndOf="@+id/token1Down"
+        app:layout_constraintTop_toTopOf="@+id/token1"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <ImageView
+        android:id="@+id/energyImage"
+        android:layout_width="54dp"
+        android:layout_height="48dp"
+        android:alpha="0.6"
+        android:rotation="90"
+        android:src="@drawable/energy"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/token2"
+        app:layout_constraintEnd_toStartOf="@+id/token2Up"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/token2Down"
+        app:layout_constraintTop_toTopOf="@+id/token2"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <ImageView
+        android:id="@+id/poisonImage"
+        android:layout_width="61dp"
+        android:layout_height="67dp"
+        android:alpha="0.6"
+        android:rotation="90"
+        android:src="@drawable/poison"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/token3"
+        app:layout_constraintEnd_toStartOf="@+id/token3Up"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toEndOf="@+id/token3Down"
+        app:layout_constraintTop_toTopOf="@+id/token3"
+        app:layout_constraintVertical_bias="0.55" />
+
     <TextView
         android:id="@+id/token1"
         android:layout_width="wrap_content"
@@ -123,6 +168,7 @@
         android:layout_height="wrap_content"
         android:rotation="90"
         android:text="@string/default_commander_dmg"
+        android:textColor="#FFCD37"
         android:textSize="40sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -138,6 +184,7 @@
         android:layout_marginTop="21dp"
         android:rotation="90"
         android:text="@string/default_commander_dmg"
+        android:textColor="#079C0F"
         android:textSize="40sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -147,17 +194,6 @@
         app:layout_constraintTop_toBottomOf="@+id/commanderDamage2"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/bloodImage"
-        android:layout_width="47dp"
-        android:layout_height="48dp"
-        android:rotation="90"
-        android:src="@drawable/blood"
-        app:layout_constraintBottom_toBottomOf="@+id/token1"
-        app:layout_constraintEnd_toStartOf="@+id/token1Up"
-        app:layout_constraintStart_toEndOf="@+id/token1Down"
-        app:layout_constraintTop_toTopOf="@+id/token1" />
-
     <TextView
         android:id="@+id/healthTextView"
         android:layout_width="wrap_content"
@@ -166,6 +202,7 @@
         android:text="@string/default_health_value"
         android:textSize="40sp"
         android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

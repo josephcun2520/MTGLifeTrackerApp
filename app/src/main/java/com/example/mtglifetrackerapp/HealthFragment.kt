@@ -55,6 +55,8 @@ class HealthFragment : Fragment() {
     var downButton : ImageButton? = null
 
     var bloodImg : ImageView? = null
+    var energyImg : ImageView? = null
+    var poisonImg : ImageView? = null
     var token1 : TextView? = null
     var token2 : TextView? = null
     var token3 : TextView? = null
@@ -64,6 +66,9 @@ class HealthFragment : Fragment() {
     var token1DownBtn : ImageButton? = null
     var token2DownBtn : ImageButton? = null
     var token3DownBtn : ImageButton? = null
+    var bloodTokens = 0
+    var energyTokens = 0
+    var poisonTokens = 0
 
     var leftButton : ImageButton? = null
     var rightButton : ImageButton? = null
@@ -122,6 +127,33 @@ class HealthFragment : Fragment() {
         return null
     }
 
+    fun changeTokens(amount:Int,type:Int):View.OnClickListener? {
+        if (type == 1){
+            bloodTokens += amount
+            token1?.setText(bloodTokens.toString())
+        }
+        else if (type == 2) {
+            energyTokens += amount
+            token2?.setText(energyTokens.toString())
+        }
+        else if (type == 3) {
+            poisonTokens += amount
+            token3?.text = poisonTokens.toString()
+
+            if (poisonTokens >= 10 && health > 0)
+            {
+                health = 0
+                healthCount?.text = health.toString()
+                var text = "Player $playNo dies to poison!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
+        }
+
+        return null
+    }
+
     private fun changePage(amount:Int): View.OnClickListener? {
         page += amount
 
@@ -155,6 +187,9 @@ class HealthFragment : Fragment() {
                 token1DownBtn?.visibility=View.INVISIBLE
                 token2DownBtn?.visibility=View.INVISIBLE
                 token3DownBtn?.visibility=View.INVISIBLE
+                bloodImg?.visibility=View.INVISIBLE
+                energyImg?.visibility=View.INVISIBLE
+                poisonImg?.visibility=View.INVISIBLE
             }
             1 -> {
                 healthCount?.visibility=View.VISIBLE
@@ -180,6 +215,9 @@ class HealthFragment : Fragment() {
                 token1DownBtn?.visibility=View.INVISIBLE
                 token2DownBtn?.visibility=View.INVISIBLE
                 token3DownBtn?.visibility=View.INVISIBLE
+                bloodImg?.visibility=View.INVISIBLE
+                energyImg?.visibility=View.INVISIBLE
+                poisonImg?.visibility=View.INVISIBLE
             }
             2 -> {
                 healthCount?.visibility=View.INVISIBLE
@@ -205,6 +243,9 @@ class HealthFragment : Fragment() {
                 token1DownBtn?.visibility=View.VISIBLE
                 token2DownBtn?.visibility=View.VISIBLE
                 token3DownBtn?.visibility=View.VISIBLE
+                bloodImg?.visibility=View.VISIBLE
+                energyImg?.visibility=View.VISIBLE
+                poisonImg?.visibility=View.VISIBLE
             }
         }
 
@@ -245,6 +286,8 @@ class HealthFragment : Fragment() {
         token2DownBtn = view.findViewById(R.id.token2Down)
         token3DownBtn = view.findViewById(R.id.token3Down)
         bloodImg = view.findViewById(R.id.bloodImage)
+        energyImg = view.findViewById(R.id.energyImage)
+        poisonImg = view.findViewById(R.id.poisonImage)
 
         upButton?.setOnClickListener{changeHealth(1)}
 
@@ -390,6 +433,12 @@ class HealthFragment : Fragment() {
         cDmgDown1Btn?.setOnClickListener{changeCommanderDamage(-1,1)}
         cDmgDown2Btn?.setOnClickListener{changeCommanderDamage(-1,2)}
         cDmgDown3Btn?.setOnClickListener{changeCommanderDamage(-1,3)}
+        token1UpBtn?.setOnClickListener{changeTokens(1,1)}
+        token1DownBtn?.setOnClickListener{changeTokens(-1,1)}
+        token2UpBtn?.setOnClickListener{changeTokens(1,2)}
+        token2DownBtn?.setOnClickListener{changeTokens(-1,2)}
+        token2UpBtn?.setOnClickListener{changeTokens(1,3)}
+        token2DownBtn?.setOnClickListener{changeTokens(-1,3)}
 
         when (this.tag) {
             "player1Fragment" -> {
