@@ -79,8 +79,7 @@ class HealthFragment : Fragment() {
     var page : Int = 1
     var playNo = 0
 
-    val pg1Views = arrayOfNulls<View>(3)
-
+    //TODO: Make arrays containing page contents
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,14 +113,38 @@ class HealthFragment : Fragment() {
         if (player == 1){
             cDmg1 += amount
             commanderDmg1?.setText(cDmg1.toString())
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 1 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
         else if (player == 2) {
             cDmg2 += amount
             commanderDmg2?.setText(cDmg2.toString())
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 2 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
         else if (player == 3) {
             cDmg3 += amount
             commanderDmg3?.text = cDmg3.toString()
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 3 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
 
         return null
@@ -424,6 +447,105 @@ class HealthFragment : Fragment() {
             true
         })
 
+        token1?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeTokens(-1,1)
+                    else if (dy<0)  //down
+                        changeTokens(1,1)
+                }
+            }
+            true
+        })
+
+        token2?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeTokens(-1,2)
+                    else if (dy<0)  //down
+                        changeTokens(1,2)
+                }
+            }
+            true
+        })
+
+        token3?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                //TODO: Make this function take distance/angle into account
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        changePage(-1)
+                    }
+                    else if (dx<0)
+                    {
+                        changePage(1)
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeTokens(-1,3)
+                    else if (dy<0)  //down
+                        changeTokens(1,3)
+                }
+            }
+            true
+        })
+
         downButton?.setOnClickListener{changeHealth(-1)}
         leftButton?.setOnClickListener{changePage(-1)}
         rightButton?.setOnClickListener{changePage(1)}
@@ -437,8 +559,8 @@ class HealthFragment : Fragment() {
         token1DownBtn?.setOnClickListener{changeTokens(-1,1)}
         token2UpBtn?.setOnClickListener{changeTokens(1,2)}
         token2DownBtn?.setOnClickListener{changeTokens(-1,2)}
-        token2UpBtn?.setOnClickListener{changeTokens(1,3)}
-        token2DownBtn?.setOnClickListener{changeTokens(-1,3)}
+        token3UpBtn?.setOnClickListener{changeTokens(1,3)}
+        token3DownBtn?.setOnClickListener{changeTokens(-1,3)}
 
         when (this.tag) {
             "player1Fragment" -> {
