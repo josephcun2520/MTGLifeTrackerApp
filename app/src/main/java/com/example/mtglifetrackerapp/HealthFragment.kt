@@ -1,17 +1,18 @@
 package com.example.mtglifetrackerapp
 
-import android.graphics.Color
+import android.R.attr.button
 import android.os.Bundle
-import android.text.style.UpdateLayout
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +34,13 @@ class HealthFragment : Fragment() {
     var cDmgCol2 = ""
     var cDmgCol3 = ""
 
+    var x1 = 0
+    var x2 = 0
+    var y1 = 0
+    var y2 = 0
+    var dx = 0
+    var dy = 0
+
     var commanderDmg1 : TextView? = null
     var commanderDmg2 : TextView? = null
     var commanderDmg3: TextView? = null
@@ -53,6 +61,7 @@ class HealthFragment : Fragment() {
     var cDmg2 : Int = 0
     var cDmg3 : Int = 0
     var page : Int = 1
+    var playNo = 0
 
     val pg1Views = arrayOfNulls<View>(3)
 
@@ -68,15 +77,14 @@ class HealthFragment : Fragment() {
     fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.setText(health.toString())
-        val playerNo = 1
         var text = ""
         if (amount < 0) {
             val posAmount = amount * -1
-            text = "Player $playerNo lost $posAmount health!"
+            text = "Player $playNo lost $posAmount health!"
         }
         else
         {
-            text = "Player $playerNo gained $amount health!"
+            text = "Player $playNo gained $amount health!"
         }
         val duration = Toast.LENGTH_SHORT
 
@@ -97,7 +105,7 @@ class HealthFragment : Fragment() {
         }
         else if (player == 3) {
             cDmg3 += amount
-            commanderDmg3?.setText(cDmg3.toString())
+            commanderDmg3?.text = cDmg3.toString()
         }
 
         return null
@@ -188,6 +196,38 @@ class HealthFragment : Fragment() {
         cDmgDown3Btn = view.findViewById(R.id.cDmgDown3)
 
         upButton?.setOnClickListener{changeHealth(1)}
+
+        healthCount?.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                x1 = event.getX().toInt()
+                y1 = event.getY().toInt()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                x2 = event.getX().toInt()
+                y2 = event.getY().toInt()
+                dx = x2-x1
+                dy = y2-y1
+
+                if(Math.abs(dx) > Math.abs(dy))
+                {
+                    if (dx>0){
+                        //right
+                    }
+                    else if (dx<0)
+                    {
+                        //left
+                    }
+                }
+                else
+                {
+                    if (dy>0)   //up
+                        changeHealth(-1)
+                    else if (dy<0)  //down
+                        changeHealth(1)
+                }
+            }
+            true
+        })
+
         downButton?.setOnClickListener{changeHealth(-1)}
         leftButton?.setOnClickListener{changePage(-1)}
         rightButton?.setOnClickListener{changePage(1)}
@@ -198,6 +238,30 @@ class HealthFragment : Fragment() {
         cDmgDown2Btn?.setOnClickListener{changeCommanderDamage(-1,2)}
         cDmgDown3Btn?.setOnClickListener{changeCommanderDamage(-1,3)}
 
+        when (this.tag) {
+            "player1Fragment" -> {
+                playNo = 1
+            }
+            "player2Fragment" -> {
+                playNo = 2
+            }
+            "player3Fragment" -> {
+                playNo = 3
+            }
+            "player4Fragment" -> {
+                playNo = 4
+            }
+        }
+
+        val handler = Handler()
+        handler.postDelayed(Runnable {
+            // yourMethod();
+            var text = "Test"
+            val duration = Toast.LENGTH_SHORT
+            val toast = Toast.makeText(context, text, duration)
+            toast.show()
+
+        }, 1000) //5 seconds
 
     }
 

@@ -14,6 +14,7 @@
         android:layout_margin="5dp"
         android:background="@color/player1"
         android:rotation="0"
+        android:tag="player1Fragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +26,7 @@
         android:layout_margin="5dp"
         android:background="@color/player2"
         android:rotation="180"
+        android:tag="player2Fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +38,7 @@
         android:layout_margin="5dp"
         android:background="@color/player3"
         android:rotation="0"
+        android:tag="player3Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -47,6 +50,7 @@
         android:layout_margin="5dp"
         android:background="@color/player4"
         android:rotation="180"
+        android:tag="player4Fragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
