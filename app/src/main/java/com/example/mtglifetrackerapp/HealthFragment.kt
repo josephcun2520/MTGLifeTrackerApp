@@ -1,7 +1,9 @@
 package com.example.mtglifetrackerapp
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -81,6 +83,10 @@ class HealthFragment : Fragment() {
 
     //TODO: Make arrays containing page contents
 
+    //Vibrate variables
+    val vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    var deathPattern = longArrayOf(0, 250, 0, 250)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -89,22 +95,26 @@ class HealthFragment : Fragment() {
         }
     }
 
+
     fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.setText(health.toString())
         var text = ""
-        if (amount < 0) {
-            val posAmount = amount * -1
-            text = "Player $playNo lost $posAmount health!"
-        }
-        else
-        {
-            text = "Player $playNo gained $amount health!"
-        }
-        val duration = Toast.LENGTH_SHORT
+        //if (health <= 0) {  //Dead
+            //vib.vibrate(deathPattern, -1)
+        //} else {
+            if (amount < 0) {
+                vib.vibrate(100)
+                val posAmount = amount * -1
+                text = "Player $playNo lost $posAmount health!"
+            } else {
+                text = "Player $playNo gained $amount health!"
+            }
+            val duration = Toast.LENGTH_SHORT
 
-        val toast = Toast.makeText(context, text, duration)
-        toast.show()
+            val toast = Toast.makeText(context, text, duration)
+            toast.show()
+        }
 
         return null
     }
