@@ -80,8 +80,7 @@ class HealthFragment : Fragment() {
     var page : Int = 1
     var playNo = 0
 
-    val pg1Views = arrayOfNulls<View>(3)
-
+    //TODO: Make arrays containing page contents
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,14 +118,38 @@ class HealthFragment : Fragment() {
         if (player == 1){
             cDmg1 += amount
             commanderDmg1?.setText(cDmg1.toString())
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 1 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
         else if (player == 2) {
             cDmg2 += amount
             commanderDmg2?.setText(cDmg2.toString())
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 2 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
         else if (player == 3) {
             cDmg3 += amount
             commanderDmg3?.text = cDmg3.toString()
+
+            if (cDmg3 >= 21)
+            {
+                var text = "Player 3 dies to commander damage!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
 
         return null
