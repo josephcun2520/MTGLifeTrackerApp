@@ -2,6 +2,7 @@ package com.example.mtglifetrackerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 
 var diceButton : ImageButton? = null
