@@ -69,7 +69,6 @@ class DiceFragment : DialogFragment() {
             submit()
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         }
-        //roll different types of dice + quantity
     }
 
 

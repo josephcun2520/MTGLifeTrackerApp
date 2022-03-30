@@ -1,7 +1,9 @@
 package com.example.mtglifetrackerapp
 
+import android.content.Context.VIBRATOR_SERVICE
 import android.os.Bundle
 import android.os.Handler
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -11,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 
 
@@ -81,6 +84,9 @@ class HealthFragment : Fragment() {
 
     val pg1Views = arrayOfNulls<View>(3)
 
+    //Vibrate variables
+    val vib =  requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+    var deathPattern = longArrayOf(0, 250, 0, 250)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,18 +100,22 @@ class HealthFragment : Fragment() {
         health += amount
         healthCount?.setText(health.toString())
         var text = ""
-        if (amount < 0) {
-            val posAmount = amount * -1
-            text = "Player $playNo lost $posAmount health!"
-        }
-        else
-        {
-            text = "Player $playNo gained $amount health!"
-        }
-        val duration = Toast.LENGTH_SHORT
 
-        val toast = Toast.makeText(context, text, duration)
-        toast.show()
+        if (health <= 0) {  //Dead
+            vib.vibrate(deathPattern, -1)
+        } else {
+            if (amount < 0) {
+                vib.vibrate(100)
+                val posAmount = amount * -1
+                text = "Player $playNo lost $posAmount health!"
+            } else {
+                text = "Player $playNo gained $amount health!"
+            }
+            val duration = Toast.LENGTH_SHORT
+
+            val toast = Toast.makeText(context, text, duration)
+            toast.show()
+        }
 
         return null
     }
