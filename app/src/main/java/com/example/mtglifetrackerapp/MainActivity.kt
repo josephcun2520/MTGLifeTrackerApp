@@ -4,15 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.widget.Button
-import com.example.mtglifetrackerapp.DiceActivity
 import com.example.mtglifetrackerapp.databinding.ActivityMainBinding
-
-private lateinit var binding : ActivityMainBinding
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import androidx.fragment.app.FragmentContainer
 
+private lateinit var binding : ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
