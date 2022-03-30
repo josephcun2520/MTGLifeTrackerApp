@@ -8,20 +8,33 @@ import com.example.mtglifetrackerapp.DiceActivity
 import com.example.mtglifetrackerapp.databinding.ActivityMainBinding
 
 private lateinit var binding : ActivityMainBinding
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.ImageButton
+import androidx.fragment.app.FragmentContainer
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
-        val but : Button = binding.diceButton
-        but.setOnClickListener {
-            val intent = Intent (this@MainActivity, DiceActivity::class.java)
-            startActivity(intent)
-        }
+        setContentView(R.layout.activity_main)
+        val diceButton : ImageButton = findViewById(R.id.diceButton)
+        val p1fragment : View? = findViewById(R.id.fragmentContainerView)
+        val p2fragment : View? = findViewById(R.id.fragmentContainerView2)
+        val p3fragment : View? = findViewById(R.id.fragmentContainerView3)
+        val p4fragment : View? = findViewById(R.id.fragmentContainerView4)
 
+        diceButton?.setOnClickListener {openDiceScreen()}
+        p1fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
+        p2fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
+        p3fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
+        p4fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
+    }
 
-        //TODO: use put extra to save state between activity transitions
+    private fun openDiceScreen(){
+        val newFragment = DiceFragment()
+        newFragment.show(supportFragmentManager, "game")
     }
 }

@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">MTG Life Tracker App</string>
+    <string name="dice_button">Dice</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="default_health_value">40</string>
+    <string name="default_commander_dmg">0</string>
+    <string name="dialog_start_game">Start</string>
+    <string name="hello_blank_fragment">Hello!</string>
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="rollPrompt">Enter amount to roll</string>
 
     <string-array name="dice_array">
         <item>Select Dice</item>
