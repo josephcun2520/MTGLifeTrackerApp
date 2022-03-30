@@ -1,6 +1,8 @@
 package com.example.mtglifetrackerapp
 
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Vibrator
@@ -13,7 +15,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -83,9 +87,12 @@ class HealthFragment : Fragment() {
 
     //TODO: Make arrays containing page contents
 
-    //Vibrate variables
+    //Variables
     val vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     var deathPattern = longArrayOf(0, 250, 0, 250)
+    private var players = Vector<PlayerData>()
+    lateinit var notificationManager: NotificationManager
+    var gameOver = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +100,19 @@ class HealthFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        notificationManager = this.activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+
+    private fun shareResults(shareText : String) {
+        val sendIntent : Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
+        startActivity(shareIntent)
     }
 
 
@@ -114,7 +134,7 @@ class HealthFragment : Fragment() {
 
             val toast = Toast.makeText(context, text, duration)
             toast.show()
-        }
+        //}
 
         return null
     }
