@@ -8,4 +8,13 @@
     <string name="hello_blank_fragment">Hello!</string>
     <string name="start">Start</string>
     <string name="cancel">Cancel</string>
+    <string name="rollPrompt">Enter amount to roll</string>
+
+    <string-array name="dice_array">
+        <item>Select Dice</item>
+        <item>Coinflip</item>
+        <item>D6</item>
+        <item>D20</item>
+    </string-array>
+
 </resources>
