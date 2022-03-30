@@ -1,6 +1,7 @@
 package com.example.mtglifetrackerapp
 
 import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import java.util.*
@@ -113,6 +115,21 @@ class HealthFragment : Fragment() {
 
         val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
         startActivity(shareIntent)
+    }
+
+    private fun winnerNotify(notifyText : String) {
+        val channelID = "MTG"
+        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+
+        var builder = NotificationCompat.Builder(requireContext(), channelID)
+        //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Game Over")
+            .setContentText(notifyText)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            //.setContentIntent(pendingIntent)
+
+        notificationManager.notify(1, builder.build())
+
     }
 
 
