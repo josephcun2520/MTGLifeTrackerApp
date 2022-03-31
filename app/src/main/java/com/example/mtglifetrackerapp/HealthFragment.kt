@@ -9,16 +9,14 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
@@ -99,6 +97,7 @@ class HealthFragment : Fragment() {
     var gameOver = false
     var deaths = arrayOf(false, false, false, false)   //To track who is dead
     lateinit var notificationManager: NotificationManager
+    //lateinit var shareBut : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,6 +145,7 @@ class HealthFragment : Fragment() {
 
     fun changeHealth(amount:Int): View.OnClickListener? {
         var text = ""
+
         if (health <= 0) {  //Dead
             health = 0
             healthCount?.setText((health.toString()))
@@ -168,8 +168,39 @@ class HealthFragment : Fragment() {
             val toast = Toast.makeText(context, text, duration)
             toast.show()
         }
-
+        checkAlive()
         return null
+    }
+
+    fun checkAlive() {
+        var deaths = arrayOf(false, false, false, false)   //To track who is dead
+        var deathCount = 0
+        var aliveIdx = -1
+
+        for (i in 0..4) {
+            if (playNo == i && health <= 0)   {  //If current player is dead
+                deaths[i] = true
+                deathCount++
+            }
+        }
+        if (deathCount == 3) { //only one player left
+            aliveIdx = deaths.indexOf(true)
+        }
+
+        if (aliveIdx != -1) {
+            shareResults("Winner is Player $aliveIdx+1")
+        }
+    }
+
+    private fun shareResults(shareText : String) {
+        val sendIntent : Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+
+        //val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
+        startActivity(Intent.createChooser(sendIntent, "Share Via "))
     }
 
     fun changeCommanderDamage(amount:Int,player:Int):View.OnClickListener? {
@@ -379,6 +410,9 @@ class HealthFragment : Fragment() {
         bloodImg = view.findViewById(R.id.bloodImage)
         energyImg = view.findViewById(R.id.energyImage)
         poisonImg = view.findViewById(R.id.poisonImage)
+
+        //shareBut = view.findViewById(R.id.shareButton)
+        //shareBut.visibility = View.INVISIBLE    //Hide button
 
         upButton?.setOnClickListener{changeHealth(1)}
 
