@@ -21,3 +21,18 @@ class MainActivity : AppCompatActivity() {
         newFragment.show(supportFragmentManager, "game")
     }
 }
+
+//lateinit var notificationManager: NotificationManager
+//notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+//    private fun shareResults(shareText : String) {
+//        val sendIntent : Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            putExtra(Intent.EXTRA_TEXT, shareText)
+//            type = "text/plain"
+//        }
+//
+//        val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
+//        startActivity(shareIntent)
+//    }
+//

@@ -92,8 +92,9 @@ class HealthFragment : Fragment() {
     private lateinit var vib : Vibrator
     var deathPattern = longArrayOf(0, 250, 0, 250)
     private var players = Vector<PlayerData>()
-    //lateinit var notificationManager: NotificationManager
     var gameOver = false
+    var deaths = arrayOf(false, false, false, false)   //To track who is dead
+    lateinit var notificationManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,36 +103,24 @@ class HealthFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
+        notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        //notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 
-//    private fun shareResults(shareText : String) {
-//        val sendIntent : Intent = Intent().apply {
-//            action = Intent.ACTION_SEND
-//            putExtra(Intent.EXTRA_TEXT, shareText)
-//            type = "text/plain"
-//        }
-//
-//        val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
-//        startActivity(shareIntent)
-//    }
-//
-//    private fun winnerNotify(notifyText : String) {
-//        val channelID = "MTG"
-//        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
-//
-//        var builder = NotificationCompat.Builder(requireContext(), channelID)
-//        //.setSmallIcon(R.drawable.notification_icon)
-//            .setContentTitle("Game Over")
-//            .setContentText(notifyText)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            //.setContentIntent(pendingIntent)
-//
-//        notificationManager.notify(1, builder.build())
-//
-//    }
+        private fun winnerNotify(notifyText : String) {
+        val channelID = "MTG"
+        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
 
+        var builder = NotificationCompat.Builder(requireContext(), channelID)
+        //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Game Over")
+            .setContentText(notifyText)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            //.setContentIntent(pendingIntent)
+
+        notificationManager.notify(1, builder.build())
+
+    }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
         var text = ""
@@ -139,6 +128,7 @@ class HealthFragment : Fragment() {
             health = 0
             healthCount?.setText((health.toString()))
             vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+
                 //TODO: notify of death here or in commander damage
         } else {
             health += amount
@@ -161,12 +151,14 @@ class HealthFragment : Fragment() {
     }
 
     fun changeCommanderDamage(amount:Int,player:Int):View.OnClickListener? {
+
         if (player == 1){
             cDmg1 += amount
             commanderDmg1?.setText(cDmg1.toString())
 
             if (cDmg3 >= 21)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 var text = "Player 1 dies to commander damage!"
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(context, text, duration)
@@ -179,6 +171,7 @@ class HealthFragment : Fragment() {
 
             if (cDmg3 >= 21)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 var text = "Player 2 dies to commander damage!"
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(context, text, duration)
@@ -191,6 +184,7 @@ class HealthFragment : Fragment() {
 
             if (cDmg3 >= 21)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 var text = "Player 3 dies to commander damage!"
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(context, text, duration)
@@ -216,6 +210,7 @@ class HealthFragment : Fragment() {
 
             if (poisonTokens >= 10 && health > 0)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 health = 0
                 healthCount?.text = health.toString()
                 var text = "Player $playNo dies to poison!"
