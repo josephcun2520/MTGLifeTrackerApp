@@ -15,6 +15,7 @@
         android:background="@color/player1"
         android:rotation="0"
         android:tag="player1Fragment"
+        tools:viewBindingType="android.widget.FrameLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_health" />
@@ -65,6 +66,7 @@
         android:layout_height="80dp"
         android:layout_margin="5dp"
         android:adjustViewBounds="false"
+        android:background="#00FFFFFF"
         android:cropToPadding="false"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +74,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/d6"
+        tools:ignore="ContentDescription"
         tools:srcCompat="@drawable/d6" />
+
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/roundedbutton"
+        android:backgroundTint="#47959F"
+        android:cropToPadding="false"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:tint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toEndOf="@+id/diceButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.489"
+        app:srcCompat="@android:drawable/ic_menu_info_details"
+        app:tint="#00FFFFFF"
+        tools:ignore="ContentDescription" />
+
+    <!-- android:enabled="false" -->
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/diceButton"
+        app:layout_constraintHorizontal_bias="0.879"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

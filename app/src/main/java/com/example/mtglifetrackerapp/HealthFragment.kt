@@ -1,145 +1,186 @@
 package com.example.mtglifetrackerapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
+import android.os.VibrationEffect
+import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Intent
+import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import java.util.*
+import kotlin.math.abs
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HealthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HealthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    var healthCount : TextView? = null
+    private var healthCount : TextView? = null
+    private var commanderDmg1 : TextView? = null
+    private var commanderDmg2 : TextView? = null
+    private var commanderDmg3: TextView? = null
+    private var cDmgUp1Btn : ImageButton? = null
+    private var cDmgUp2Btn : ImageButton? = null
+    private var cDmgUp3Btn : ImageButton? = null
+    private var cDmgDown1Btn : ImageButton? = null
+    private var cDmgDown2Btn : ImageButton? = null
+    private var cDmgDown3Btn : ImageButton? = null
+    private var heartImg : ImageView? = null
+    private var edhImg1 : ImageView? = null
+    private var edhImg2 : ImageView? = null
+    private var edhImg3 : ImageView? = null
+    private var upButton : ImageButton? = null
+    private var downButton : ImageButton? = null
+    private var bloodImg : ImageView? = null
+    private var energyImg : ImageView? = null
+    private var poisonImg : ImageView? = null
+    private var token1 : TextView? = null
+    private var token2 : TextView? = null
+    private var token3 : TextView? = null
+    private var token1UpBtn : ImageButton? = null
+    private var token2UpBtn : ImageButton? = null
+    private var token3UpBtn : ImageButton? = null
+    private var token1DownBtn : ImageButton? = null
+    private var token2DownBtn : ImageButton? = null
+    private var token3DownBtn : ImageButton? = null
+    private var bloodTokens = 0
+    private var energyTokens = 0
+    private var poisonTokens = 0
+    private var leftButton : ImageButton? = null
+    private var rightButton : ImageButton? = null
+    private var health : Int = 40
+    private var cDmg1 : Int = 0
+    private var cDmg2 : Int = 0
+    private var cDmg3 : Int = 0
+    private var page : Int = 1
+    private var playNo = 0
+    private var c1 : Int = 0
+    private var c2 : Int = 0
+    private var c3 : Int = 0
 
-    var cDmgCol1 = ""
-    var cDmgCol2 = ""
-    var cDmgCol3 = ""
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_health, container, false)
+    }
 
-    public var x1 = 0
-    public var x2 = 0
-    public var y1 = 0
-    public var y2 = 0
-    public var dx = 0
-    public var dy = 0
-
-    var commanderDmg1 : TextView? = null
-    var commanderDmg2 : TextView? = null
-    var commanderDmg3: TextView? = null
-    var cDmgUp1Btn : ImageButton? = null
-    var cDmgUp2Btn : ImageButton? = null
-    var cDmgUp3Btn : ImageButton? = null
-    var cDmgDown1Btn : ImageButton? = null
-    var cDmgDown2Btn : ImageButton? = null
-    var cDmgDown3Btn : ImageButton? = null
-
-    var upButton : ImageButton? = null
-    var downButton : ImageButton? = null
-
-    var bloodImg : ImageView? = null
-    var energyImg : ImageView? = null
-    var poisonImg : ImageView? = null
-    var token1 : TextView? = null
-    var token2 : TextView? = null
-    var token3 : TextView? = null
-    var token1UpBtn : ImageButton? = null
-    var token2UpBtn : ImageButton? = null
-    var token3UpBtn : ImageButton? = null
-    var token1DownBtn : ImageButton? = null
-    var token2DownBtn : ImageButton? = null
-    var token3DownBtn : ImageButton? = null
-    var bloodTokens = 0
-    var energyTokens = 0
-    var poisonTokens = 0
-
-    var leftButton : ImageButton? = null
-    var rightButton : ImageButton? = null
-    var health : Int = 40
-    var cDmg1 : Int = 0
-    var cDmg2 : Int = 0
-    var cDmg3 : Int = 0
-    var page : Int = 1
-    var playNo = 0
-
-    val pg1Views = arrayOfNulls<View>(3)
-
+    //Variables
+    private lateinit var vib : Vibrator
+    var deathPattern = longArrayOf(0, 250, 0, 250)
+    private var players = Vector<PlayerData>()
+    var gameOver = false
+    var deaths = arrayOf(false, false, false, false)   //To track who is dead
+    lateinit var notificationManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+
+    private fun winnerNotify(notifyText : String) {
+        val channelID = "MTG"
+        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+
+        var builder = NotificationCompat.Builder(requireContext(), channelID)
+        //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Game Over")
+            .setContentText(notifyText)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            //.setContentIntent(pendingIntent)
+
+        notificationManager.notify(1, builder.build())
+
     }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
-        health += amount
-        healthCount?.setText(health.toString())
+        if (health <= 0) {  //Dead
+            healthCount?.setText((health.toString()))
+            vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+            //TODO: notify of death here or in commander damage
+        } else {
+            health += amount
+            healthCount?.setText(health.toString())
 
-        if (amount >= 5 || amount <= -5) {
-            healthCount?.animation = AnimationUtils.loadAnimation(context,R.anim.shake_animation)
-            var text = ""
-            if (amount < 0) {
-                val posAmount = amount * -1
-                text = "Player $playNo lost $posAmount health!"
-            }
-            else
+            if (amount >= 5 || amount <= -5)
             {
-                text = "Player $playNo gained $amount health!"
+                healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
+                vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                val text = if (amount < 0)
+                    "Player $playNo lost ${amount*-1} health!"
+                else
+                    "Player $playNo gained $amount health!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
             }
-            val duration = Toast.LENGTH_SHORT
-
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
         }
 
         return null
     }
 
-    fun changeCommanderDamage(amount:Int,player:Int):View.OnClickListener? {
-        if (player == 1){
-            cDmg1 += amount
-            commanderDmg1?.setText(cDmg1.toString())
+    private fun changeCommanderDamage(amount:Int, player:Int):View.OnClickListener? {
+        when (player) {
+            1 -> {
+                cDmg1 += amount
+                commanderDmg1?.text = cDmg1.toString()
+                if (cDmg1 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c1 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
+            }
+            2 -> {
+                cDmg2 += amount
+                commanderDmg2?.text = cDmg2.toString()
+                if (cDmg2 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c2 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
+            }
+            3 -> {
+                cDmg3 += amount
+                commanderDmg3?.text = cDmg3.toString()
+                if (cDmg3 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c3 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
+            }
         }
-        else if (player == 2) {
-            cDmg2 += amount
-            commanderDmg2?.setText(cDmg2.toString())
-        }
-        else if (player == 3) {
-            cDmg3 += amount
-            commanderDmg3?.text = cDmg3.toString()
-        }
-
         return null
     }
 
-    fun changeTokens(amount:Int,type:Int):View.OnClickListener? {
+    private fun changeTokens(amount:Int, type:Int):View.OnClickListener? {
         if (type == 1){
             bloodTokens += amount
-            token1?.setText(bloodTokens.toString())
+            token1?.text = bloodTokens.toString()
         }
         else if (type == 2) {
             energyTokens += amount
-            token2?.setText(energyTokens.toString())
+            token2?.text = energyTokens.toString()
         }
         else if (type == 3) {
             poisonTokens += amount
@@ -147,9 +188,10 @@ class HealthFragment : Fragment() {
 
             if (poisonTokens >= 10 && health > 0)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 health = 0
                 healthCount?.text = health.toString()
-                var text = "Player $playNo dies to poison!"
+                val text = "Player $playNo dies to poison!"
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(context, text, duration)
                 toast.show()
@@ -163,15 +205,16 @@ class HealthFragment : Fragment() {
         page += amount
 
         if (page > 2)
-            page = 0
-        else if (page < 0)
             page = 2
+        else if (page < 0)
+            page = 0
 
         when (page) {
             0 -> {
                 healthCount?.visibility=View.INVISIBLE
                 upButton?.visibility=View.INVISIBLE
                 downButton?.visibility=View.INVISIBLE
+                heartImg?.visibility=View.INVISIBLE
 
                 commanderDmg1?.visibility=View.VISIBLE
                 commanderDmg2?.visibility=View.VISIBLE
@@ -182,6 +225,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.VISIBLE
                 cDmgDown2Btn?.visibility=View.VISIBLE
                 cDmgDown3Btn?.visibility=View.VISIBLE
+                edhImg1?.visibility=View.VISIBLE
+                edhImg2?.visibility=View.VISIBLE
+                edhImg3?.visibility=View.VISIBLE
 
                 token1?.visibility=View.INVISIBLE
                 token2?.visibility=View.INVISIBLE
@@ -195,11 +241,14 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.INVISIBLE
                 energyImg?.visibility=View.INVISIBLE
                 poisonImg?.visibility=View.INVISIBLE
+
+                leftButton?.visibility=View.INVISIBLE
             }
             1 -> {
                 healthCount?.visibility=View.VISIBLE
                 upButton?.visibility=View.VISIBLE
                 downButton?.visibility=View.VISIBLE
+                heartImg?.visibility=View.VISIBLE
 
                 commanderDmg1?.visibility=View.INVISIBLE
                 commanderDmg2?.visibility=View.INVISIBLE
@@ -210,6 +259,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+                edhImg1?.visibility=View.INVISIBLE
+                edhImg2?.visibility=View.INVISIBLE
+                edhImg3?.visibility=View.INVISIBLE
 
                 token1?.visibility=View.INVISIBLE
                 token2?.visibility=View.INVISIBLE
@@ -223,11 +275,15 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.INVISIBLE
                 energyImg?.visibility=View.INVISIBLE
                 poisonImg?.visibility=View.INVISIBLE
+
+                leftButton?.visibility=View.VISIBLE
+                rightButton?.visibility=View.VISIBLE
             }
             2 -> {
                 healthCount?.visibility=View.INVISIBLE
                 upButton?.visibility=View.INVISIBLE
                 downButton?.visibility=View.INVISIBLE
+                heartImg?.visibility=View.INVISIBLE
 
                 commanderDmg1?.visibility=View.INVISIBLE
                 commanderDmg2?.visibility=View.INVISIBLE
@@ -238,6 +294,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+                edhImg1?.visibility=View.INVISIBLE
+                edhImg2?.visibility=View.INVISIBLE
+                edhImg3?.visibility=View.INVISIBLE
 
                 token1?.visibility=View.VISIBLE
                 token2?.visibility=View.VISIBLE
@@ -251,20 +310,15 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.VISIBLE
                 energyImg?.visibility=View.VISIBLE
                 poisonImg?.visibility=View.VISIBLE
+
+                rightButton?.visibility=View.INVISIBLE
             }
         }
 
         return null
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_health, container, false)
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         upButton = view.findViewById(R.id.upButton)
@@ -293,252 +347,75 @@ class HealthFragment : Fragment() {
         bloodImg = view.findViewById(R.id.bloodImage)
         energyImg = view.findViewById(R.id.energyImage)
         poisonImg = view.findViewById(R.id.poisonImage)
+        heartImg = view.findViewById(R.id.heartImage)
+        edhImg1 = view.findViewById(R.id.edhImage1)
+        edhImg2 = view.findViewById(R.id.edhImage2)
+        edhImg3 = view.findViewById(R.id.edhImage3)
 
+        healthCount?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeHealth(-5)
+                "down" -> changeHealth(5)
+                "bigUp" -> changeHealth(-10)
+                "bigDown" -> changeHealth(10)
+            }
+            true
+        }
+        commanderDmg1?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeCommanderDamage(-5, 1)
+                "down" -> changeCommanderDamage(5, 1)
+                "bigUp" -> changeCommanderDamage(-10, 1)
+                "bigDown" -> changeCommanderDamage(10, 1)
+            }
+            true
+        }
+        commanderDmg2?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeCommanderDamage(-5, 2)
+                "down" -> changeCommanderDamage(5, 2)
+                "bigUp" -> changeCommanderDamage(-10, 2)
+                "bigDown" -> changeCommanderDamage(10, 2)
+            }
+            true
+        }
+        commanderDmg3?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeCommanderDamage(-5, 3)
+                "down" -> changeCommanderDamage(5, 3)
+                "bigUp" -> changeCommanderDamage(-10, 3)
+                "bigDown" -> changeCommanderDamage(10, 3)
+            }
+            true
+        }
+        token1?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeTokens(-5, 1)
+                "down" -> changeTokens(5, 1)
+                "bigUp" -> changeTokens(-10, 1)
+                "bigDown" -> changeTokens(10, 1)
+            }
+            true
+        }
+        token2?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeTokens(-5, 2)
+                "down" -> changeTokens(5, 2)
+                "bigUp" -> changeTokens(-10, 2)
+                "bigDown" -> changeTokens(10, 2)
+            }
+            true
+        }
+        token3?.setOnTouchListener { _, event ->
+            when (getDirectionOfSwipe(event)) {
+                "up" -> changeTokens(-5, 3)
+                "down" -> changeTokens(5, 3)
+                "bigUp" -> changeTokens(-10, 3)
+                "bigDown" -> changeTokens(10, 3)
+            }
+            true
+        }
         upButton?.setOnClickListener{changeHealth(1)}
-
-        //TODO: Move on touch listener to separate function so that it can be used for many elements without needing 30 lines for each
-        healthCount?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                var text = "dx=$dx, dy=$dy"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>150)   //up
-                    {
-                        changeHealth(-10)
-                    }
-                    else if (dy<-150)  //down
-                        changeHealth(10)
-                    else if (dy>0)   //up
-                        changeHealth(-5)
-                    else if (dy<0)  //down
-                        changeHealth(5)
-                }
-            }
-            true
-        })
-
-        commanderDmg1?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeCommanderDamage(-1,1)
-                    else if (dy<0)  //down
-                        changeCommanderDamage(1,1)
-                }
-            }
-            true
-        })
-
-        commanderDmg2?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeCommanderDamage(-1,2)
-                    else if (dy<0)  //down
-                        changeCommanderDamage(1,2)
-                }
-            }
-            true
-        })
-
-        commanderDmg3?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeCommanderDamage(-1,3)
-                    else if (dy<0)  //down
-                        changeCommanderDamage(1,3)
-                }
-            }
-            true
-        })
-
-        token1?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeTokens(-1,1)
-                    else if (dy<0)  //down
-                        changeTokens(1,1)
-                }
-            }
-            true
-        })
-
-        token2?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeTokens(-1,2)
-                    else if (dy<0)  //down
-                        changeTokens(1,2)
-                }
-            }
-            true
-        })
-
-        token3?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>0)   //up
-                        changeTokens(-1,3)
-                    else if (dy<0)  //down
-                        changeTokens(1,3)
-                }
-            }
-            true
-        })
-
         downButton?.setOnClickListener{changeHealth(-1)}
         leftButton?.setOnClickListener{changePage(-1)}
         rightButton?.setOnClickListener{changePage(1)}
@@ -558,47 +435,74 @@ class HealthFragment : Fragment() {
         when (this.tag) {
             "player1Fragment" -> {
                 playNo = 1
+                c1 = 2
+                c2 = 3
+                c3 = 4
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player2Fragment" -> {
                 playNo = 2
+                c1 = 1
+                c2 = 3
+                c3 = 4
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player3Fragment" -> {
                 playNo = 3
+                c1 = 1
+                c2 = 2
+                c3 = 4
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player4Fragment" -> {
                 playNo = 4
+                c1 = 1
+                c2 = 2
+                c3 = 3
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player3))
             }
         }
 
-        val handler = Handler()
-        handler.postDelayed(Runnable {
-            // yourMethod();
-            var text = "Test"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-
-        }, 1000) //5 seconds
-
+        changePage(0)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HealthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HealthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun getDirectionOfSwipe(event:MotionEvent) : String {
+        var x1 = 0
+        var y1 = 0
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            x1 = event.x.toInt()
+            y1 = event.y.toInt()
+        } else if (event.action == MotionEvent.ACTION_UP) {
+            val x2 = event.x.toInt()
+            val y2 = event.y.toInt()
+            val dx = x2-x1
+            val dy = y2-y1
+
+            if(abs(dx) > abs(dy))
+            {
+                if (dx>0)
+                    changePage(1)
+                else if (dx<0)
+                    changePage(-1)
+            }
+            else
+            {
+                when {
+                    dy>170  -> return "bigUp"
+                    dy<-170 -> return "bigDown"
+                    dy>0    -> return "up"
+                    dy<0    -> return "down"
                 }
             }
+        }
+        return ""
     }
 }
