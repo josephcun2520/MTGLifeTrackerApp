@@ -1,13 +1,16 @@
 package com.example.mtglifetrackerapp
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.graphics.Color
 import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -68,6 +71,15 @@ class HealthFragment : Fragment() {
     private var c2 : Int = 0
     private var c3 : Int = 0
 
+    //Variables
+    private lateinit var vib : Vibrator
+    var deathPattern = longArrayOf(0, 250, 0, 250)
+    private var players = Vector<PlayerData>()
+    var gameOver = false
+    var deaths = arrayOf(false, false, false, false)   //To track who is dead
+    lateinit var notificationManager: NotificationManager
+    //lateinit var shareBut : Button
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,59 +88,102 @@ class HealthFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_health, container, false)
     }
 
-    //Variables
-    private lateinit var vib : Vibrator
-    var deathPattern = longArrayOf(0, 250, 0, 250)
-    private var players = Vector<PlayerData>()
-    var gameOver = false
-    var deaths = arrayOf(false, false, false, false)   //To track who is dead
-    lateinit var notificationManager: NotificationManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        createNotificationChannel("MTG", "MTG-Lifetracker", "Description" )
     }
 
-    private fun winnerNotify(notifyText : String) {
+    private fun createNotificationChannel(id: String, name: String, desc: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val notChannel = NotificationChannel(id, name, importance)
+        notChannel.description = desc
+        notChannel.enableLights(true)
+        notChannel.lightColor = Color.BLUE
+
+        notificationManager.createNotificationChannel(notChannel)
+    }
+
+    private fun playerNotify(notifyText : String) {
         val channelID = "MTG"
-        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+        val intent = Intent(requireContext(), MainActivity::class.java). apply {
+            flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            //flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent : PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         var builder = NotificationCompat.Builder(requireContext(), channelID)
-        //.setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Game Over")
+            .setSmallIcon(R.drawable.monarch_icon)
+            .setContentTitle("MTG Tracker")
             .setContentText(notifyText)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            //.setContentIntent(pendingIntent)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         notificationManager.notify(1, builder.build())
 
     }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
+        var text = ""
+
         if (health <= 0) {  //Dead
+            health = 0
             healthCount?.setText((health.toString()))
             vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
-            //TODO: notify of death here or in commander damage
+            playerNotify("Player $playNo has died")
+            //TODO: notify of death here or in commander damage or poison damage
         } else {
             health += amount
             healthCount?.setText(health.toString())
 
-            if (amount >= 5 || amount <= -5)
-            {
-                healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
+            if (amount < 0) {
                 vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-                val text = if (amount < 0)
-                    "Player $playNo lost ${amount*-1} health!"
-                else
-                    "Player $playNo gained $amount health!"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
+                val posAmount = amount * -1
+                text = "Player $playNo lost $posAmount health!"
+            } else {
+                text = "Player $playNo gained $amount health!"
+            }
+            val duration = Toast.LENGTH_SHORT
+
+            val toast = Toast.makeText(context, text, duration)
+            toast.show()
+        }
+        checkAlive()
+        return null
+    }
+
+    fun checkAlive() {
+        var deaths = arrayOf(false, false, false, false)   //To track who is dead
+        var deathCount = 0
+        var aliveIdx = -1
+
+        for (i in 0..4) {
+            if (playNo == i && health <= 0)   {  //If current player is dead
+                deaths[i] = true
+                deathCount++
             }
         }
+        if (deathCount == 3) { //only one player left
+            aliveIdx = deaths.indexOf(true)
+        }
 
-        return null
+        //if (aliveIdx != -1) {
+            //shareResults("Winner is Player $aliveIdx+1")
+        //}
+    }
+
+    private fun shareResults(shareText : String) {
+        val sendIntent : Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+
+        //val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
+        startActivity(Intent.createChooser(sendIntent, "Share Via "))
     }
 
     private fun changeCommanderDamage(amount:Int, player:Int):View.OnClickListener? {
@@ -138,7 +193,7 @@ class HealthFragment : Fragment() {
                 commanderDmg1?.text = cDmg1.toString()
                 if (cDmg1 >= 21)
                 {
-                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                     val text = "Player $c1 dies to commander damage!"
                     val duration = Toast.LENGTH_SHORT
                     val toast = Toast.makeText(context, text, duration)
@@ -150,7 +205,7 @@ class HealthFragment : Fragment() {
                 commanderDmg2?.text = cDmg2.toString()
                 if (cDmg2 >= 21)
                 {
-                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                     val text = "Player $c2 dies to commander damage!"
                     val duration = Toast.LENGTH_SHORT
                     val toast = Toast.makeText(context, text, duration)
@@ -162,7 +217,7 @@ class HealthFragment : Fragment() {
                 commanderDmg3?.text = cDmg3.toString()
                 if (cDmg3 >= 21)
                 {
-                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                     val text = "Player $c3 dies to commander damage!"
                     val duration = Toast.LENGTH_SHORT
                     val toast = Toast.makeText(context, text, duration)
