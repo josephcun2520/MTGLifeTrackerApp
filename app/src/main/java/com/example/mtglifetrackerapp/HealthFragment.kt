@@ -2,6 +2,7 @@ package com.example.mtglifetrackerapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.VibrationEffect
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -54,6 +55,9 @@ class HealthFragment : Fragment() {
     private var cDmg3 : Int = 0
     private var page : Int = 1
     private var playNo = 0
+    private var c1 : Int = 0
+    private var c2 : Int = 0
+    private var c3 : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,14 +92,38 @@ class HealthFragment : Fragment() {
             1 -> {
                 cDmg1 += amount
                 commanderDmg1?.text = cDmg1.toString()
+                if (cDmg1 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c1 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
             }
             2 -> {
                 cDmg2 += amount
                 commanderDmg2?.text = cDmg2.toString()
+                if (cDmg2 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c2 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
             }
             3 -> {
                 cDmg3 += amount
                 commanderDmg3?.text = cDmg3.toString()
+                if (cDmg3 >= 21)
+                {
+                    //vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                    val text = "Player $c3 dies to commander damage!"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
+                    toast.show()
+                }
             }
         }
         return null
@@ -362,24 +390,36 @@ class HealthFragment : Fragment() {
         when (this.tag) {
             "player1Fragment" -> {
                 playNo = 1
+                c1 = 2
+                c2 = 3
+                c3 = 4
                 commanderDmg1?.setTextColor(resources.getColor(R.color.player2))
                 commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
                 commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player2Fragment" -> {
                 playNo = 2
+                c1 = 1
+                c2 = 3
+                c3 = 4
                 commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
                 commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
                 commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player3Fragment" -> {
                 playNo = 3
+                c1 = 1
+                c2 = 2
+                c3 = 4
                 commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
                 commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
                 commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
             }
             "player4Fragment" -> {
                 playNo = 4
+                c1 = 1
+                c2 = 2
+                c3 = 3
                 commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
                 commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
                 commanderDmg3?.setTextColor(resources.getColor(R.color.player3))
