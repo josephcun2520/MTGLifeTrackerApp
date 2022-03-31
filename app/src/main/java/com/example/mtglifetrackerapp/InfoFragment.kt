@@ -4,24 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.DialogFragment
+import com.example.mtglifetrackerapp.databinding.FragmentInfoBinding
 
 class InfoFragment : DialogFragment() {
+
+    private var _binding : FragmentInfoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //Apply the xml file
-        return inflater.inflate(R.layout.fragment_info, container)
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dismissButton : Button = view.findViewById(R.id.dismissButton)
-        dismissButton.setOnClickListener { dismiss() }
+        binding.dismissButton.setOnClickListener { dismiss() }
     }
 
     override fun onStart() {

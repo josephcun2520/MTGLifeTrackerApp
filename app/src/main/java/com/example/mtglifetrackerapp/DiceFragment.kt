@@ -24,31 +24,22 @@ import com.example.mtglifetrackerapp.databinding.FragmentDiceBinding
 
 class DiceFragment : DialogFragment() {
 
-    private lateinit var binding : FragmentDiceBinding
+    //private lateinit var binding : FragmentDiceBinding
+    private var _binding: FragmentDiceBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //Apply the xml file
-        return inflater.inflate(R.layout.fragment_dice, container)
+        _binding = FragmentDiceBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (dialog != null) {       //Make box fit screen size
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog!!.window!!.setLayout(width, height)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        binding = FragmentDiceBinding.inflate(layoutInflater)
-        super.onCreate(savedInstanceState)
-        //setContentView(binding.root)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val v = requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
 
         val spinner : Spinner = binding.diceSpinner
@@ -71,6 +62,15 @@ class DiceFragment : DialogFragment() {
         //roll different types of dice + quantity
 
         binding.closeButton.setOnClickListener { dismiss() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (dialog != null) {       //Make box fit screen size
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog!!.window!!.setLayout(width, height)
+        }
     }
 
 

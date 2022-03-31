@@ -1,7 +1,8 @@
-package com.example.mtglifetrackerapp
+package com.example .mtglifetrackerapp
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -15,33 +16,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HealthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HealthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var x1 = 0
+    var x2 = 0
+    var y1 = 0
+    var y2 = 0
+    var dx = 0
+    var dy = 0
     var healthCount : TextView? = null
-
-    var cDmgCol1 = ""
-    var cDmgCol2 = ""
-    var cDmgCol3 = ""
-
-    public var x1 = 0
-    public var x2 = 0
-    public var y1 = 0
-    public var y2 = 0
-    public var dx = 0
-    public var dy = 0
-
     var commanderDmg1 : TextView? = null
     var commanderDmg2 : TextView? = null
     var commanderDmg3: TextView? = null
@@ -51,10 +33,8 @@ class HealthFragment : Fragment() {
     var cDmgDown1Btn : ImageButton? = null
     var cDmgDown2Btn : ImageButton? = null
     var cDmgDown3Btn : ImageButton? = null
-
     var upButton : ImageButton? = null
     var downButton : ImageButton? = null
-
     var bloodImg : ImageView? = null
     var energyImg : ImageView? = null
     var poisonImg : ImageView? = null
@@ -70,7 +50,6 @@ class HealthFragment : Fragment() {
     var bloodTokens = 0
     var energyTokens = 0
     var poisonTokens = 0
-
     var leftButton : ImageButton? = null
     var rightButton : ImageButton? = null
     var health : Int = 40
@@ -80,15 +59,8 @@ class HealthFragment : Fragment() {
     var page : Int = 1
     var playNo = 0
 
-    val pg1Views = arrayOfNulls<View>(3)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
@@ -298,45 +270,22 @@ class HealthFragment : Fragment() {
 
         //TODO: Move on touch listener to separate function so that it can be used for many elements without needing 30 lines for each
         healthCount?.setOnTouchListener(OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX().toInt()
-                y1 = event.getY().toInt()
-            } else if (event.action == MotionEvent.ACTION_UP) {
-                x2 = event.getX().toInt()
-                y2 = event.getY().toInt()
-                dx = x2-x1
-                dy = y2-y1
-
-                var text = "dx=$dx, dy=$dy"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
-
-                //TODO: Make this function take distance/angle into account
-
-                if(Math.abs(dx) > Math.abs(dy))
-                {
-                    if (dx>0){
-                        changePage(-1)
-                    }
-                    else if (dx<0)
-                    {
-                        changePage(1)
-                    }
-                }
-                else
-                {
-                    if (dy>150)   //up
-                    {
-                        changeHealth(-10)
-                    }
-                    else if (dy<-150)  //down
-                        changeHealth(10)
-                    else if (dy>0)   //up
-                        changeHealth(-5)
-                    else if (dy<0)  //down
-                        changeHealth(5)
-                }
+            val direction : String = getDirectionOfSwipe(event)
+            if (direction == "up")
+            {
+                changeHealth(-5)
+            }
+            else if (direction == "down")
+            {
+                changeHealth(5)
+            }
+            else if (direction == "bigUp")
+            {
+                changeHealth(-10)
+            }
+            else if (direction == "bigDown")
+            {
+                changeHealth(10)
             }
             true
         })
@@ -582,23 +531,38 @@ class HealthFragment : Fragment() {
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HealthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HealthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    fun getDirectionOfSwipe(event:MotionEvent) : String {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            x1 = event.getX().toInt()
+            y1 = event.getY().toInt()
+        } else if (event.action == MotionEvent.ACTION_UP) {
+            x2 = event.getX().toInt()
+            y2 = event.getY().toInt()
+            dx = x2-x1
+            dy = y2-y1
+
+            if(Math.abs(dx) > Math.abs(dy))
+            {
+                if (dx>0){
+                    changePage(-1)
+                }
+                else if (dx<0)
+                {
+                    changePage(1)
                 }
             }
+            else
+            {
+                if (dy>150)   //up
+                    return "bigUp"
+                else if (dy<-150)  //down
+                    return "bigDown"
+                else if (dy>0)   //up
+                    return "up"
+                else if (dy<0)  //down
+                    return "down"
+            }
+        }
+        return ""
     }
 }
