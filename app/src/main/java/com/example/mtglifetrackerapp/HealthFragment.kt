@@ -3,10 +3,9 @@ package com.example.mtglifetrackerapp
 import android.app.NotificationManager
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.os.Bundle
-import android.os.Handler
-import android.os.Vibrator
+import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -90,10 +89,10 @@ class HealthFragment : Fragment() {
     //TODO: Make arrays containing page contents
 
     //Variables
-    val vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    private lateinit var vib : Vibrator
     var deathPattern = longArrayOf(0, 250, 0, 250)
     private var players = Vector<PlayerData>()
-    lateinit var notificationManager: NotificationManager
+    //lateinit var notificationManager: NotificationManager
     var gameOver = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,45 +102,50 @@ class HealthFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        notificationManager = this.activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        //notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    private fun shareResults(shareText : String) {
-        val sendIntent : Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, shareText)
-            type = "text/plain"
-        }
-
-        val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
-        startActivity(shareIntent)
-    }
-
-    private fun winnerNotify(notifyText : String) {
-        val channelID = "MTG"
-        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
-
-        var builder = NotificationCompat.Builder(requireContext(), channelID)
-        //.setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Game Over")
-            .setContentText(notifyText)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            //.setContentIntent(pendingIntent)
-
-        notificationManager.notify(1, builder.build())
-
-    }
+//    private fun shareResults(shareText : String) {
+//        val sendIntent : Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            putExtra(Intent.EXTRA_TEXT, shareText)
+//            type = "text/plain"
+//        }
+//
+//        val shareIntent = Intent.createChooser(sendIntent, "Share Via ")
+//        startActivity(shareIntent)
+//    }
+//
+//    private fun winnerNotify(notifyText : String) {
+//        val channelID = "MTG"
+//        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+//
+//        var builder = NotificationCompat.Builder(requireContext(), channelID)
+//        //.setSmallIcon(R.drawable.notification_icon)
+//            .setContentTitle("Game Over")
+//            .setContentText(notifyText)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            //.setContentIntent(pendingIntent)
+//
+//        notificationManager.notify(1, builder.build())
+//
+//    }
 
 
     fun changeHealth(amount:Int): View.OnClickListener? {
-        health += amount
-        healthCount?.setText(health.toString())
         var text = ""
-        //if (health <= 0) {  //Dead
-            //vib.vibrate(deathPattern, -1)
-        //} else {
+        if (health <= 0) {  //Dead
+            health = 0
+            healthCount?.setText((health.toString()))
+            vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+                //TODO: notify of death here or in commander damage
+        } else {
+            health += amount
+            healthCount?.setText(health.toString())
+
             if (amount < 0) {
-                vib.vibrate(100)
+                vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
                 val posAmount = amount * -1
                 text = "Player $playNo lost $posAmount health!"
             } else {
@@ -151,7 +155,7 @@ class HealthFragment : Fragment() {
 
             val toast = Toast.makeText(context, text, duration)
             toast.show()
-        //}
+        }
 
         return null
     }
