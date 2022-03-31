@@ -3,15 +3,22 @@ package com.example.mtglifetrackerapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.VibrationEffect
+import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Intent
+import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import kotlin.math.abs
 
@@ -78,6 +85,61 @@ class HealthFragment : Fragment() {
                 "Player $playNo lost $posAmount health!"
             } else
                 "Player $playNo gained $amount health!"
+    //TODO: Make arrays containing page contents
+
+    //Variables
+    private lateinit var vib : Vibrator
+    var deathPattern = longArrayOf(0, 250, 0, 250)
+    private var players = Vector<PlayerData>()
+    var gameOver = false
+    var deaths = arrayOf(false, false, false, false)   //To track who is dead
+    lateinit var notificationManager: NotificationManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+
+        notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+
+        private fun winnerNotify(notifyText : String) {
+        val channelID = "MTG"
+        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+
+        var builder = NotificationCompat.Builder(requireContext(), channelID)
+        //.setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Game Over")
+            .setContentText(notifyText)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            //.setContentIntent(pendingIntent)
+
+        notificationManager.notify(1, builder.build())
+
+    }
+
+    fun changeHealth(amount:Int): View.OnClickListener? {
+        var text = ""
+        if (health <= 0) {  //Dead
+            health = 0
+            healthCount?.setText((health.toString()))
+            vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
+
+                //TODO: notify of death here or in commander damage
+        } else {
+            health += amount
+            healthCount?.setText(health.toString())
+
+            if (amount < 0) {
+                vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                val posAmount = amount * -1
+                text = "Player $playNo lost $posAmount health!"
+            } else {
+                text = "Player $playNo gained $amount health!"
+            }
             val duration = Toast.LENGTH_SHORT
 
             val toast = Toast.makeText(context, text, duration)
@@ -144,6 +206,7 @@ class HealthFragment : Fragment() {
 
             if (poisonTokens >= 10 && health > 0)
             {
+                vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
                 health = 0
                 healthCount?.text = health.toString()
                 val text = "Player $playNo dies to poison!"
