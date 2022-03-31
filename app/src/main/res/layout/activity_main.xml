@@ -61,6 +61,7 @@
         android:layout_height="80dp"
         android:layout_margin="5dp"
         android:adjustViewBounds="false"
+        android:background="#00FFFFFF"
         android:cropToPadding="false"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,14 +69,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/d6"
-        tools:srcCompat="@drawable/d6"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@drawable/d6" />
 
     <ImageButton
         android:id="@+id/infoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
+        android:background="#00FFFFFF"
+        android:backgroundTint="#47959F"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:tint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.155"
@@ -91,8 +97,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
+        app:layout_constraintEnd_toStartOf="@+id/diceButton"
+        app:layout_constraintHorizontal_bias="0.879"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />

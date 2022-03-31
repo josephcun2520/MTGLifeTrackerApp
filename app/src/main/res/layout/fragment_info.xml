@@ -34,11 +34,11 @@
         android:id="@+id/textView6"
         android:layout_width="362dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="2dp"
         android:text="This app was developed by Joseph Cunningham and Lewis Birkett, final-year students at Sheffield Hallam University."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintVertical_bias="0.0" />
@@ -76,7 +76,7 @@
         android:id="@+id/textView7"
         android:layout_width="362dp"
         android:layout_height="80dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="2dp"
         android:text="Press the Dice button in the center of the screen to access the dice menu, where you can roll various types of dice (six-sided, 20-sided, and a coin toss) which can come in handy during gameplay."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,31 +89,33 @@
         android:id="@+id/textView17"
         android:layout_width="362dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="To increase and decrease health, press the up or down buttons on each player's health tracker. You can also swipe up and down (from that player's perspective) to increase/decrease by 5 or 10, depending on the distance of the swipe. Press the buttons on the side of a life tracker to access the other tabs: the Commander Damage and Counters pages."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="362dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="Commander Damage is a measurement of how much damage each player's Commander has dealt to other players. The Counters being tracked in this app represent resources which can be used during gameplay, so representing them here is a convenient way for players to use them."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17"
-        app:layout_constraintVertical_bias="0.09" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/dismissButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="10dp"
         android:text="Dismiss"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

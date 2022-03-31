@@ -106,18 +106,6 @@ class HealthFragment : Fragment() {
     }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
-        health += amount
-        healthCount?.text = health.toString()
-
-        if (amount >= 5 || amount <= -5) {
-            healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
-            val text = if (amount < 0) {
-                val posAmount = amount * -1
-                "Player $playNo lost $posAmount health!"
-            } else
-                "Player $playNo gained $amount health!"
-        }
-        var text = ""
         if (health <= 0) {  //Dead
             healthCount?.setText((health.toString()))
             vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
@@ -126,17 +114,18 @@ class HealthFragment : Fragment() {
             health += amount
             healthCount?.setText(health.toString())
 
-            if (amount < 0) {
+            if (amount >= 5 || amount <= -5)
+            {
+                healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
                 vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-                val posAmount = amount * -1
-                text = "Player $playNo lost $posAmount health!"
-            } else {
-                text = "Player $playNo gained $amount health!"
+                val text = if (amount < 0)
+                    "Player $playNo lost ${amount*-1} health!"
+                else
+                    "Player $playNo gained $amount health!"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
             }
-            val duration = Toast.LENGTH_SHORT
-
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
         }
 
         return null
@@ -401,19 +390,19 @@ class HealthFragment : Fragment() {
         }
         token1?.setOnTouchListener { _, event ->
             when (getDirectionOfSwipe(event)) {
-                "up" -> changeTokens(-5, 2)
-                "down" -> changeTokens(5, 2)
-                "bigUp" -> changeTokens(-10, 2)
-                "bigDown" -> changeTokens(10, 2)
+                "up" -> changeTokens(-5, 1)
+                "down" -> changeTokens(5, 1)
+                "bigUp" -> changeTokens(-10, 1)
+                "bigDown" -> changeTokens(10, 1)
             }
             true
         }
         token2?.setOnTouchListener { _, event ->
             when (getDirectionOfSwipe(event)) {
-                "up" -> changeTokens(-5, 3)
-                "down" -> changeTokens(5, 3)
-                "bigUp" -> changeTokens(-10, 3)
-                "bigDown" -> changeTokens(10, 3)
+                "up" -> changeTokens(-5, 2)
+                "down" -> changeTokens(5, 2)
+                "bigUp" -> changeTokens(-10, 2)
+                "bigDown" -> changeTokens(10, 2)
             }
             true
         }
@@ -481,6 +470,8 @@ class HealthFragment : Fragment() {
                 commanderDmg3?.setTextColor(resources.getColor(R.color.player3))
             }
         }
+
+        changePage(0)
     }
 
     private fun getDirectionOfSwipe(event:MotionEvent) : String {
