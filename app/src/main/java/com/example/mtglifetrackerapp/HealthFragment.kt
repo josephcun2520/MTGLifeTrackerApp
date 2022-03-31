@@ -25,6 +25,10 @@ class HealthFragment : Fragment() {
     private var cDmgDown1Btn : ImageButton? = null
     private var cDmgDown2Btn : ImageButton? = null
     private var cDmgDown3Btn : ImageButton? = null
+    private var heartImg : ImageView? = null
+    private var edhImg1 : ImageView? = null
+    private var edhImg2 : ImageView? = null
+    private var edhImg3 : ImageView? = null
     private var upButton : ImageButton? = null
     private var downButton : ImageButton? = null
     private var bloodImg : ImageView? = null
@@ -122,15 +126,16 @@ class HealthFragment : Fragment() {
         page += amount
 
         if (page > 2)
-            page = 0
-        else if (page < 0)
             page = 2
+        else if (page < 0)
+            page = 0
 
         when (page) {
             0 -> {
                 healthCount?.visibility=View.INVISIBLE
                 upButton?.visibility=View.INVISIBLE
                 downButton?.visibility=View.INVISIBLE
+                heartImg?.visibility=View.INVISIBLE
 
                 commanderDmg1?.visibility=View.VISIBLE
                 commanderDmg2?.visibility=View.VISIBLE
@@ -141,6 +146,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.VISIBLE
                 cDmgDown2Btn?.visibility=View.VISIBLE
                 cDmgDown3Btn?.visibility=View.VISIBLE
+                edhImg1?.visibility=View.VISIBLE
+                edhImg2?.visibility=View.VISIBLE
+                edhImg3?.visibility=View.VISIBLE
 
                 token1?.visibility=View.INVISIBLE
                 token2?.visibility=View.INVISIBLE
@@ -154,11 +162,14 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.INVISIBLE
                 energyImg?.visibility=View.INVISIBLE
                 poisonImg?.visibility=View.INVISIBLE
+
+                leftButton?.visibility=View.INVISIBLE
             }
             1 -> {
                 healthCount?.visibility=View.VISIBLE
                 upButton?.visibility=View.VISIBLE
                 downButton?.visibility=View.VISIBLE
+                heartImg?.visibility=View.VISIBLE
 
                 commanderDmg1?.visibility=View.INVISIBLE
                 commanderDmg2?.visibility=View.INVISIBLE
@@ -169,6 +180,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+                edhImg1?.visibility=View.INVISIBLE
+                edhImg2?.visibility=View.INVISIBLE
+                edhImg3?.visibility=View.INVISIBLE
 
                 token1?.visibility=View.INVISIBLE
                 token2?.visibility=View.INVISIBLE
@@ -182,11 +196,15 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.INVISIBLE
                 energyImg?.visibility=View.INVISIBLE
                 poisonImg?.visibility=View.INVISIBLE
+
+                leftButton?.visibility=View.VISIBLE
+                rightButton?.visibility=View.VISIBLE
             }
             2 -> {
                 healthCount?.visibility=View.INVISIBLE
                 upButton?.visibility=View.INVISIBLE
                 downButton?.visibility=View.INVISIBLE
+                heartImg?.visibility=View.INVISIBLE
 
                 commanderDmg1?.visibility=View.INVISIBLE
                 commanderDmg2?.visibility=View.INVISIBLE
@@ -197,6 +215,9 @@ class HealthFragment : Fragment() {
                 cDmgDown1Btn?.visibility=View.INVISIBLE
                 cDmgDown2Btn?.visibility=View.INVISIBLE
                 cDmgDown3Btn?.visibility=View.INVISIBLE
+                edhImg1?.visibility=View.INVISIBLE
+                edhImg2?.visibility=View.INVISIBLE
+                edhImg3?.visibility=View.INVISIBLE
 
                 token1?.visibility=View.VISIBLE
                 token2?.visibility=View.VISIBLE
@@ -210,6 +231,8 @@ class HealthFragment : Fragment() {
                 bloodImg?.visibility=View.VISIBLE
                 energyImg?.visibility=View.VISIBLE
                 poisonImg?.visibility=View.VISIBLE
+
+                rightButton?.visibility=View.INVISIBLE
             }
         }
 
@@ -253,6 +276,10 @@ class HealthFragment : Fragment() {
         bloodImg = view.findViewById(R.id.bloodImage)
         energyImg = view.findViewById(R.id.energyImage)
         poisonImg = view.findViewById(R.id.poisonImage)
+        heartImg = view.findViewById(R.id.heartImage)
+        edhImg1 = view.findViewById(R.id.edhImage1)
+        edhImg2 = view.findViewById(R.id.edhImage2)
+        edhImg3 = view.findViewById(R.id.edhImage3)
 
         healthCount?.setOnTouchListener { _, event ->
             when (getDirectionOfSwipe(event)) {
@@ -335,10 +362,30 @@ class HealthFragment : Fragment() {
         token3DownBtn?.setOnClickListener{changeTokens(-1,3)}
 
         when (this.tag) {
-            "player1Fragment" -> playNo = 1
-            "player2Fragment" -> playNo = 2
-            "player3Fragment" -> playNo = 3
-            "player4Fragment" -> playNo = 4
+            "player1Fragment" -> {
+                playNo = 1
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
+            }
+            "player2Fragment" -> {
+                playNo = 2
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player3))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
+            }
+            "player3Fragment" -> {
+                playNo = 3
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player4))
+            }
+            "player4Fragment" -> {
+                playNo = 4
+                commanderDmg1?.setTextColor(resources.getColor(R.color.player1))
+                commanderDmg2?.setTextColor(resources.getColor(R.color.player2))
+                commanderDmg3?.setTextColor(resources.getColor(R.color.player3))
+            }
         }
     }
 
@@ -357,18 +404,18 @@ class HealthFragment : Fragment() {
             if(abs(dx) > abs(dy))
             {
                 if (dx>0){
-                    changePage(-1)
+                    changePage(1)
                 }
                 else if (dx<0)
                 {
-                    changePage(1)
+                    changePage(-1)
                 }
             }
             else
             {
                 when {
-                    dy>150  -> return "bigUp"
-                    dy<-150 -> return "bigDown"
+                    dy>170  -> return "bigUp"
+                    dy<-170 -> return "bigDown"
                     dy>0    -> return "up"
                     dy<0    -> return "down"
                 }
