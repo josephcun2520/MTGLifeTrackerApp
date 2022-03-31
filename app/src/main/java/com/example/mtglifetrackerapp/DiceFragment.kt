@@ -80,7 +80,7 @@ class DiceFragment : DialogFragment() {
             amountStr.setText(0)
             spin.setSelection(0)    //Set to default position
         } else {        //Do roll/spins
-            val spinVal = "D6"//spin.selectedItem.toString()
+            val spinVal = spin.selectedItem.toString()
             //For quantity, roll the right dice
             for (i in 1..amount) {
                 when (spinVal) {
