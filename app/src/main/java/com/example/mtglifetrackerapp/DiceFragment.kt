@@ -64,19 +64,24 @@ class DiceFragment : DialogFragment() {
             spinner.adapter = adapter
         }
 
-        val but : Button = binding.Submit
-        but.setOnClickListener {
+        binding.Submit.setOnClickListener {
             submit()
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         }
         //roll different types of dice + quantity
+
+        binding.closeButton.setOnClickListener { dismiss() }
     }
 
 
     private fun submit() {
         //if wrong input (0 / too many dice) on edittext then reset values and don't perform submit
         val amountStr = binding.quantity
-        val amount : Int = Integer.parseInt(amountStr.text.toString())
+        var amount : Int = Integer.parseInt(amountStr.text.toString())
+        if (amount < 1)
+        {
+            amount = 1
+        }
         val results = binding.results
         val spin = binding.diceSpinner
         var resultStr = ""
@@ -86,9 +91,9 @@ class DiceFragment : DialogFragment() {
             amountStr.setText(0)
             spin.setSelection(0)    //Set to default position
         } else {        //Do roll/spins
-            val spinVal : String = spin.selectedItem.toString()
+            val spinVal : String = "D6"//spin.selectedItem.toString()
             //For quantity, roll the right dice
-            for (i in 0..amount) {
+            for (i in 1..amount) {
                 when (spinVal) {
                     "Coinflip" -> resultStr += "Coin Flip Result " + coinFlip() + "\n"
                     "D6" -> resultStr += "Dice Result " + rollDx(6) + "\n"

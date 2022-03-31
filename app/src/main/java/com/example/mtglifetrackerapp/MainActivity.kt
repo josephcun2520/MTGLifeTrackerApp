@@ -1,33 +1,40 @@
 package com.example.mtglifetrackerapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
-import androidx.fragment.app.FragmentContainer
+import com.example.mtglifetrackerapp.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding : ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setContentView(R.layout.activity_main)
-        val diceButton : ImageButton = findViewById(R.id.diceButton)
-        val p1fragment : View? = findViewById(R.id.fragmentContainerView)
-        val p2fragment : View? = findViewById(R.id.fragmentContainerView2)
-        val p3fragment : View? = findViewById(R.id.fragmentContainerView3)
-        val p4fragment : View? = findViewById(R.id.fragmentContainerView4)
+        binding.infoButton.setOnClickListener {openIntroScreen()}
+        binding.diceButton.setOnClickListener {openDiceScreen()}
 
-        diceButton?.setOnClickListener {openDiceScreen()}
-        p1fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
-        p2fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
-        p3fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
-        p4fragment?.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
+        binding.fragmentContainerView.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
+        binding.fragmentContainerView2.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
+        binding.fragmentContainerView3.animation = AnimationUtils.loadAnimation(this,R.anim.slide_up)
+        binding.fragmentContainerView4.animation = AnimationUtils.loadAnimation(this,R.anim.slide_down)
     }
 
     private fun openDiceScreen(){
         val newFragment = DiceFragment()
         newFragment.show(supportFragmentManager, "game")
+    }
+    private fun openIntroScreen(){
+        val newFragment = InfoFragment()
+        newFragment.show(supportFragmentManager,"game")
     }
 }
