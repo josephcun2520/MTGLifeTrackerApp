@@ -488,9 +488,9 @@ class HealthFragment : Fragment() {
 
             if(abs(dx) > abs(dy))
             {
-                if (dx>0)
+                if (dx > 160)
                     changePage(1)
-                else if (dx<0)
+                else if (dx < -160)
                     changePage(-1)
             }
             else
