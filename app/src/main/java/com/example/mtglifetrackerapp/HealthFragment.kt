@@ -1,10 +1,14 @@
 package com.example.mtglifetrackerapp
 
+import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.graphics.Color
 import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -105,18 +109,36 @@ class HealthFragment : Fragment() {
 
         notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        createNotificationChannel("MTG", "MTG-Lifetracker", "Description" )
+
     }
 
-        private fun winnerNotify(notifyText : String) {
+    private fun createNotificationChannel(id: String, name: String, desc: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val notChannel = NotificationChannel(id, name, importance)
+        notChannel.description = desc
+        notChannel.enableLights(true)
+        notChannel.lightColor = Color.BLUE
+
+        notificationManager.createNotificationChannel(notChannel)
+    }
+
+        private fun playerNotify(notifyText : String) {
         val channelID = "MTG"
-        //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
+            val intent = Intent(requireContext(), MainActivity::class.java). apply {
+                flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+                //flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        val pendingIntent : PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         var builder = NotificationCompat.Builder(requireContext(), channelID)
-        //.setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Game Over")
+        .setSmallIcon(R.drawable.monarch_icon)
+            .setContentTitle("MTG Tracker")
             .setContentText(notifyText)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            //.setContentIntent(pendingIntent)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         notificationManager.notify(1, builder.build())
 
@@ -128,8 +150,8 @@ class HealthFragment : Fragment() {
             health = 0
             healthCount?.setText((health.toString()))
             vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
-
-                //TODO: notify of death here or in commander damage
+            playerNotify("Player $playNo has died")
+                //TODO: notify of death here or in commander damage or poison damage
         } else {
             health += amount
             healthCount?.setText(health.toString())
