@@ -83,7 +83,6 @@
         android:cropToPadding="false"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        android:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.155"

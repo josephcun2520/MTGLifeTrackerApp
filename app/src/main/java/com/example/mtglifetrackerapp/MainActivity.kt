@@ -36,13 +36,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class MyApplication : Application() {
-    var shouldVibrate : Boolean = true
-    var shouldToast : Boolean = true
-    var mute : Boolean = false
-    var shouldAnimate : Boolean = true
-}
-
 //lateinit var notificationManager: NotificationManager
 //notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
