@@ -55,6 +55,14 @@ class HealthFragment : Fragment() {
     private var page : Int = 1
     private var playNo = 0
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_health, container, false)
+    }
+
     private fun changeHealth(amount:Int): View.OnClickListener? {
         health += amount
         healthCount?.text = health.toString()
@@ -64,9 +72,8 @@ class HealthFragment : Fragment() {
             val text = if (amount < 0) {
                 val posAmount = amount * -1
                 "Player $playNo lost $posAmount health!"
-            } else {
+            } else
                 "Player $playNo gained $amount health!"
-            }
             val duration = Toast.LENGTH_SHORT
 
             val toast = Toast.makeText(context, text, duration)
@@ -91,7 +98,6 @@ class HealthFragment : Fragment() {
                 commanderDmg3?.text = cDmg3.toString()
             }
         }
-
         return null
     }
 
@@ -237,14 +243,6 @@ class HealthFragment : Fragment() {
         }
 
         return null
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_health, container, false)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -403,13 +401,10 @@ class HealthFragment : Fragment() {
 
             if(abs(dx) > abs(dy))
             {
-                if (dx>0){
+                if (dx>0)
                     changePage(1)
-                }
                 else if (dx<0)
-                {
                     changePage(-1)
-                }
             }
             else
             {
