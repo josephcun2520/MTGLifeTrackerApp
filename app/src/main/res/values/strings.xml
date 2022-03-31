@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MTG Life Tracker App</string>
+    <string name="app_name">MTG Life Tracker</string>
     <string name="dice_button">Dice</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="default_health_value">40</string>
