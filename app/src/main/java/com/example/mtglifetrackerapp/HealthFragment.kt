@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +21,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import java.util.*
 import kotlin.math.abs
 
 class HealthFragment : Fragment() {
@@ -74,19 +76,6 @@ class HealthFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_health, container, false)
     }
 
-    private fun changeHealth(amount:Int): View.OnClickListener? {
-        health += amount
-        healthCount?.text = health.toString()
-
-        if (amount >= 5 || amount <= -5) {
-            healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
-            val text = if (amount < 0) {
-                val posAmount = amount * -1
-                "Player $playNo lost $posAmount health!"
-            } else
-                "Player $playNo gained $amount health!"
-    //TODO: Make arrays containing page contents
-
     //Variables
     private lateinit var vib : Vibrator
     var deathPattern = longArrayOf(0, 250, 0, 250)
@@ -97,16 +86,11 @@ class HealthFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
         notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         vib =  requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-        private fun winnerNotify(notifyText : String) {
+    private fun winnerNotify(notifyText : String) {
         val channelID = "MTG"
         //val pendingIntent = getActivity(this, 0, intent, Context.FLAG_UPDATE_CURRENT)
 
@@ -122,13 +106,22 @@ class HealthFragment : Fragment() {
     }
 
     fun changeHealth(amount:Int): View.OnClickListener? {
+        health += amount
+        healthCount?.text = health.toString()
+
+        if (amount >= 5 || amount <= -5) {
+            healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
+            val text = if (amount < 0) {
+                val posAmount = amount * -1
+                "Player $playNo lost $posAmount health!"
+            } else
+                "Player $playNo gained $amount health!"
+        }
         var text = ""
         if (health <= 0) {  //Dead
-            health = 0
             healthCount?.setText((health.toString()))
             vib.vibrate(VibrationEffect.createWaveform(deathPattern, -1))
-
-                //TODO: notify of death here or in commander damage
+            //TODO: notify of death here or in commander damage
         } else {
             health += amount
             healthCount?.setText(health.toString())

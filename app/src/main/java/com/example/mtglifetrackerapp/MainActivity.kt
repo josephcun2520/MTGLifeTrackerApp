@@ -42,7 +42,6 @@ class MyApplication : Application() {
     var mute : Boolean = false
     var shouldAnimate : Boolean = true
 }
-}
 
 //lateinit var notificationManager: NotificationManager
 //notificationManager = requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
