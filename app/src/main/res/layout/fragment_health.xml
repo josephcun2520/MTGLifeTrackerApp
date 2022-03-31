@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toTopOf="@+id/cDmgDown2"
         app:layout_constraintEnd_toStartOf="@+id/commanderDamage1"
         app:layout_constraintHorizontal_bias="0.716"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/token2Down"
@@ -36,7 +37,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/commanderDamage2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/token3Down"
@@ -53,7 +55,8 @@
         app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cDmgDown2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/token1Up"
@@ -68,7 +71,9 @@
         app:layout_constraintBottom_toTopOf="@+id/cDmgUp2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toEndOf="@+id/commanderDamage1" />
+        app:layout_constraintStart_toEndOf="@+id/commanderDamage1"
+        android:contentDescription="TODO"
+        tools:ignore="ContentDescription,HardcodedText" />
 
     <ImageButton
         android:id="@+id/token2Up"
@@ -83,7 +88,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/commanderDamage2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.499"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/token3Up"
@@ -100,7 +106,8 @@
         app:layout_constraintHorizontal_bias="0.29"
         app:layout_constraintStart_toEndOf="@+id/commanderDamage3"
         app:layout_constraintTop_toBottomOf="@+id/cDmgUp2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/bloodImage"
@@ -115,7 +122,8 @@
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toEndOf="@+id/token1Down"
         app:layout_constraintTop_toTopOf="@+id/token1"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.45"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/energyImage"
@@ -130,7 +138,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/token2Down"
         app:layout_constraintTop_toTopOf="@+id/token2"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.45"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/poisonImage"
@@ -145,7 +154,8 @@
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toEndOf="@+id/token3Down"
         app:layout_constraintTop_toTopOf="@+id/token3"
-        app:layout_constraintVertical_bias="0.55" />
+        app:layout_constraintVertical_bias="0.55"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/token1"
@@ -263,7 +273,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/healthTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgUp1"
@@ -278,7 +289,8 @@
         app:layout_constraintBottom_toTopOf="@+id/cDmgUp2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toEndOf="@+id/commanderDamage1" />
+        app:layout_constraintStart_toEndOf="@+id/commanderDamage1"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgUp2"
@@ -293,7 +305,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/commanderDamage2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.499"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgUp3"
@@ -310,7 +323,8 @@
         app:layout_constraintHorizontal_bias="0.29"
         app:layout_constraintStart_toEndOf="@+id/commanderDamage3"
         app:layout_constraintTop_toBottomOf="@+id/cDmgUp2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/downButton"
@@ -323,7 +337,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/healthTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgDown1"
@@ -338,7 +353,8 @@
         app:layout_constraintBottom_toTopOf="@+id/cDmgDown2"
         app:layout_constraintEnd_toStartOf="@+id/commanderDamage1"
         app:layout_constraintHorizontal_bias="0.716"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgDown2"
@@ -352,7 +368,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/commanderDamage2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/cDmgDown3"
@@ -369,7 +386,8 @@
         app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cDmgDown2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/rightButton"
@@ -384,7 +402,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/leftButton"
@@ -399,6 +418,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/healthTextView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

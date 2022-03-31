@@ -1,12 +1,9 @@
 package com.example.mtglifetrackerapp
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Application
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mtglifetrackerapp.databinding.ActivityMainBinding
 
 
@@ -37,4 +34,11 @@ class MainActivity : AppCompatActivity() {
         val newFragment = InfoFragment()
         newFragment.show(supportFragmentManager,"game")
     }
+}
+
+class MyApplication : Application() {
+    var shouldVibrate : Boolean = true
+    var shouldToast : Boolean = true
+    var mute : Boolean = false
+    var shouldAnimate : Boolean = true
 }

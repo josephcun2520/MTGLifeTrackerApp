@@ -9,6 +9,9 @@
     <string name="start">Start</string>
     <string name="cancel">Cancel</string>
     <string name="rollPrompt">How many?</string>
+    <string name="closeButtonText">Close</string>
+    <string name="submitText">Submit</string>
+    <string name="resultsText">Results</string>
 
     <string-array name="dice_array">
         <item>Select Dice</item>

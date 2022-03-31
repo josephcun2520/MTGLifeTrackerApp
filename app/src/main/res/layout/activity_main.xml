@@ -68,7 +68,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/d6"
-        tools:srcCompat="@drawable/d6" />
+        tools:srcCompat="@drawable/d6"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/infoButton"
@@ -81,6 +82,7 @@
         app:layout_constraintStart_toEndOf="@+id/diceButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.489"
-        app:srcCompat="@android:drawable/ic_menu_info_details" />
+        app:srcCompat="@android:drawable/ic_menu_info_details"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

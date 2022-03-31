@@ -1,4 +1,4 @@
-package com.example .mtglifetrackerapp
+package com.example.mtglifetrackerapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -56,7 +56,7 @@ class HealthFragment : Fragment() {
         healthCount?.text = health.toString()
 
         if (amount >= 5 || amount <= -5) {
-            healthCount?.animation = AnimationUtils.loadAnimation(context,R.anim.shake_animation)
+            healthCount?.animation = AnimationUtils.loadAnimation(context, R.anim.shake_animation)
             val text = if (amount < 0) {
                 val posAmount = amount * -1
                 "Player $playNo lost $posAmount health!"
